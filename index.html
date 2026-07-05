@@ -489,6 +489,9 @@ function defaultData() {
  target: 25,
  activities: {
  0:[
+ {id:"su_w1",text:"Drink water",pts:1,start:"10:30",end:"10:35"},
+ {id:"su_w2",text:"Drink water",pts:1,start:"15:00",end:"15:05"},
+ {id:"su_w3",text:"Drink water",pts:1,start:"19:00",end:"19:05"},
  {id:"su1",text:"Skincare + brush teeth",pts:1,start:"09:00",end:"09:15"},
  {id:"su2",text:"Healthy breakfast",pts:3,start:"09:30",end:"10:00"},
  {id:"su3",text:"Going out",pts:8,start:"10:00",end:"20:00"},
@@ -497,6 +500,9 @@ function defaultData() {
  {id:"su6",text:"Weekly review + plan next week",pts:3,start:"21:00",end:"21:30"}
  ],
  1:[
+ {id:"mo_w1",text:"Drink water",pts:1,start:"10:30",end:"10:35"},
+ {id:"mo_w2",text:"Drink water",pts:1,start:"15:00",end:"15:05"},
+ {id:"mo_w3",text:"Drink water",pts:1,start:"19:00",end:"19:05"},
  {id:"mo1",text:"Skincare + brush teeth",pts:1,start:"09:00",end:"09:15"},
  {id:"mo2",text:"Take sun on balcony",pts:2,start:"09:15",end:"09:30"},
  {id:"mo3",text:"Healthy breakfast",pts:3,start:"09:30",end:"10:00"},
@@ -509,6 +515,9 @@ function defaultData() {
  {id:"mo10",text:"Get ready for bed",pts:1,start:"21:30",end:"22:00"}
  ],
  2:[
+ {id:"tu_w1",text:"Drink water",pts:1,start:"10:30",end:"10:35"},
+ {id:"tu_w2",text:"Drink water",pts:1,start:"15:00",end:"15:05"},
+ {id:"tu_w3",text:"Drink water",pts:1,start:"19:00",end:"19:05"},
  {id:"tu1",text:"Skincare + brush teeth",pts:1,start:"09:00",end:"09:15"},
  {id:"tu2",text:"Take sun on balcony",pts:2,start:"09:15",end:"09:30"},
  {id:"tu3",text:"Healthy breakfast",pts:3,start:"09:30",end:"10:00"},
@@ -521,6 +530,9 @@ function defaultData() {
  {id:"tu10",text:"Get ready for bed",pts:1,start:"21:30",end:"22:00"}
  ],
  3:[
+ {id:"we_w1",text:"Drink water",pts:1,start:"10:30",end:"10:35"},
+ {id:"we_w2",text:"Drink water",pts:1,start:"15:00",end:"15:05"},
+ {id:"we_w3",text:"Drink water",pts:1,start:"19:00",end:"19:05"},
  {id:"we1",text:"Skincare + brush teeth",pts:1,start:"09:00",end:"09:15"},
  {id:"we2",text:"Take sun on balcony",pts:2,start:"09:15",end:"09:30"},
  {id:"we3",text:"Healthy breakfast",pts:3,start:"09:30",end:"10:00"},
@@ -533,6 +545,9 @@ function defaultData() {
  {id:"we10",text:"Get ready for bed",pts:1,start:"21:30",end:"22:00"}
  ],
  4:[
+ {id:"th_w1",text:"Drink water",pts:1,start:"10:30",end:"10:35"},
+ {id:"th_w2",text:"Drink water",pts:1,start:"15:00",end:"15:05"},
+ {id:"th_w3",text:"Drink water",pts:1,start:"19:00",end:"19:05"},
  {id:"th1",text:"Skincare + brush teeth",pts:1,start:"09:00",end:"09:15"},
  {id:"th2",text:"Take sun on balcony",pts:2,start:"09:15",end:"09:30"},
  {id:"th3",text:"Healthy breakfast",pts:3,start:"09:30",end:"10:00"},
@@ -545,6 +560,9 @@ function defaultData() {
  {id:"th10",text:"Get ready for bed",pts:1,start:"21:30",end:"22:00"}
  ],
  5:[
+ {id:"fr_w1",text:"Drink water",pts:1,start:"10:30",end:"10:35"},
+ {id:"fr_w2",text:"Drink water",pts:1,start:"15:00",end:"15:05"},
+ {id:"fr_w3",text:"Drink water",pts:1,start:"19:00",end:"19:05"},
  {id:"fr1",text:"Skincare + brush teeth",pts:1,start:"09:00",end:"09:15"},
  {id:"fr2",text:"Take sun on balcony",pts:2,start:"09:15",end:"09:30"},
  {id:"fr3",text:"Healthy breakfast",pts:3,start:"09:30",end:"10:00"},
@@ -557,6 +575,9 @@ function defaultData() {
  {id:"fr10",text:"Get ready for bed",pts:1,start:"21:30",end:"22:00"}
  ],
  6:[
+ {id:"sa_w1",text:"Drink water",pts:1,start:"10:30",end:"10:35"},
+ {id:"sa_w2",text:"Drink water",pts:1,start:"15:00",end:"15:05"},
+ {id:"sa_w3",text:"Drink water",pts:1,start:"19:00",end:"19:05"},
  {id:"sa1",text:"Skincare + brush teeth",pts:1,start:"09:00",end:"09:15"},
  {id:"sa2",text:"Healthy breakfast",pts:3,start:"09:30",end:"10:00"},
  {id:"sa3",text:"Going out",pts:8,start:"10:00",end:"20:00"},
@@ -586,10 +607,43 @@ function defaultData() {
  completions:{},
  journal:{},
  dayHistory:{},
+ schedLog:[],
  streak:0,
  lastStreakDate:null,
  pomo:{workMin:25,breakMin:5,sessionsToday:0,lastDate:today()},
  notifEnabled:false,
+ nightly:{
+ // dayType: "all"=every day; "strong"=Mon/Wed/Fri; "serum"=Tue/Thu/Sat/Sun
+ steps:[
+ {id:"n1",name:"Cleanse face",note:"Wash away the day's dirt & oil with a gentle cleanser",dayType:"all"},
+ {id:"n9",name:"Shave",note:"Sunday only — shave after cleansing on clean, soft skin",dayType:"sunday"},
+ {id:"n2",name:"Face mask",note:"2-3x a week is plenty — clay for oil, sheet for hydration",dayType:"all"},
+ {id:"n4",name:"Strong cream (retinol/actives)",note:"Mon · Wed · Fri only — never stack with acids same night",dayType:"strong"},
+ {id:"n5",name:"Serum",note:"Tue · Thu · weekends — hydrating or brightening",dayType:"serum"},
+ {id:"n6",name:"Dark spot cream",note:"Serum days only — target dark spots, apply only where needed",dayType:"serum"},
+ {id:"n7",name:"Hydration cream",note:"Seal everything in with your moisturizer",dayType:"all"},
+ {id:"n8",name:"Eye bag cream",note:"Every day — gently pat around the eye, don't rub",dayType:"all"}
+ ],
+ // face massages (researched) — do after creams, glide with oil/moisturizer
+ massages:[
+ {id:"m1",name:"Neck drainage sweep",note:"Sweep hands/gua sha down sides of neck to collarbone. Opens lymph nodes. 5-6x each side"},
+ {id:"m2",name:"Jawline sculpt",note:"From chin, glide outward to ears along the jaw. Light pressure. 5x each side"},
+ {id:"m3",name:"Cheek lift",note:"Push fluid from nose & cheeks outward toward the ears. 5x each side"},
+ {id:"m4",name:"Under-eye depuff",note:"Very light — sweep inner corner outward to ears, then down neck. 3-5x"},
+ {id:"m5",name:"Forehead smooth",note:"From center of forehead sweep out to temples, then down to ears. 5x"}
+ ],
+ // face/jaw exercises (researched) — every day
+ exercises:[
+ {id:"e1",name:"Chin tucks",note:"Glide chin straight back (gentle double-chin). Hold 3s. 2 sets x 8-10"},
+ {id:"e2",name:"Neck curl-ups",note:"Lying down, tongue on roof, lift head ~2in like a crunch. 3 sets x 10"},
+ {id:"e3",name:"Chin-up / jaw jut",note:"Push lower jaw forward, lift lower lip. Hold 10s. x15"},
+ {id:"e4",name:"Vowel O-E",note:"Exaggerate 'O' then 'E' to work mouth & cheeks. 3 sets x 15"},
+ {id:"e5",name:"Tongue-palate hum",note:"Press tongue behind top teeth, hum. 2 sets x 20-30s"},
+ {id:"e6",name:"Collarbone chin-in",note:"Head level, glide head back over shoulders to feel neck contract. 3 sets x 10"}
+ ],
+ log:{},        // { dateKey: [itemId, ...] } — today's checkmarks
+ history:[]     // [{date, done, total}] — logged completed routines
+ },
  wishlist:{
  categories:["Sweaters","Shirts","Hoodies","Accessories","Pants","Shoes","Electronics"],
  items:[]  // {id, cat, name, price, link, img}
@@ -697,12 +751,13 @@ if(!S.dayHistory) S.dayHistory={};
 if(S.streak===undefined) S.streak=0;
 if(!S.gym) S.gym=defaultData().gym;
 if(!S.dayOverrides) S.dayOverrides={};
-// ── v3 migration: new gym split + Tue/Thu schedule (keeps logs, journal, food, progress) ──
-if(S._structVer!==3){
+if(!S.schedLog) S.schedLog=[];
+// ── v4 migration: new gym split + Tue/Thu schedule + water reminders (keeps logs, journal, food, progress) ──
+if(S._structVer!==4){
  const def=defaultData();
- S.activities=def.activities;   // refresh weekly schedule (removes tennis, gym Tue/Thu)
+ S.activities=def.activities;   // refresh weekly schedule (adds water, removes tennis)
  S.gym.routines=def.gym.routines; // new 5-day beginner weight-gain split
- S._structVer=3;
+ S._structVer=4;
  save();
 }
 if(!S.gym.gymLog) S.gym.gymLog={};
@@ -711,6 +766,17 @@ if(!S.gym.attendance) S.gym.attendance=[];
 if(!S.nutrition) S.nutrition=defaultData().nutrition;
 if(!S.wishlist) S.wishlist=defaultData().wishlist;
 if(!S.money) S.money=defaultData().money;
+if(!S.nightly) S.nightly=defaultData().nightly;
+// refresh nightly steps/massages/exercises to latest (keeps log + history)
+if(S._nightlyVer!==3){
+ const dn=defaultData().nightly;
+ S.nightly.steps=dn.steps;
+ S.nightly.massages=dn.massages;
+ S.nightly.exercises=dn.exercises;
+ if(!S.nightly.history) S.nightly.history=[];
+ S._nightlyVer=3;
+ save();
+}
 if(!S.nutrition.weightLog) S.nutrition.weightLog=[];
 if(!S.nutrition.nutrView) S.nutrition.nutrView="diary";
 if(!S.nutrition.proteinGoal) S.nutrition.proteinGoal=120;
@@ -744,9 +810,11 @@ function isConsec(a,b){
 // ─── APP STATE ───────────────────────────────────────────────────────────────
 let tab="schedule";
 let selDay=new Date().getDay();
+let schedView="timeline"; // "timeline" | "nightly"
 let gymDay=new Date().getDay();
 let gymView="workout";
 let progView="overview"; // "overview" | "goal" | "gigs" | "savings"
+let weekView="stats"; // "stats" | "journal" | "focus"
 let nutrView="diary"; // "diary" | "weight" // "workout" | "prs"
 let pomoState={mode:"work",secs:S.pomo.workMin*60,running:false};
 let pomoTimer=null;
@@ -813,8 +881,8 @@ function render(){
  </div>
  </div>
  <div class="tabs">
- ${["schedule","gym","nutrition","wishlist","progress","week","journal","focus"].map(t=>
- `<button class="tab${tab===t?" active":""}" data-tab="${t}">${{schedule:"Schedule",gym:"Gym",nutrition:"Nutrition",wishlist:"Wishlist",progress:"Progress",week:"Week",journal:"Journal",focus:"Focus"}[t]}</button>`
+ ${["schedule","gym","nutrition","progress","week"].map(t=>
+ `<button class="tab${tab===t?" active":""}" data-tab="${t}">${{schedule:"Schedule",gym:"Gym",nutrition:"Nutrition",progress:"Progress",week:"Week"}[t]}</button>`
  ).join("")}
  </div>
  <div id="content"></div>
@@ -835,8 +903,6 @@ function renderContent(){
  else if(tab==="wishlist") el.innerHTML=renderWishlist();
  else if(tab==="progress") el.innerHTML=renderProgress();
  else if(tab==="week") el.innerHTML=renderWeek();
- else if(tab==="journal") el.innerHTML=renderJournal();
- else if(tab==="focus") el.innerHTML=renderFocus();
  attachHandlers();
 }
 
@@ -853,7 +919,15 @@ function renderSchedule(){
  const bonus=S.bonus||[];
  const comp=S.completions[t]||[];
 
- return`
+ const subnav=`
+ <div class="gym-tab-btns">
+ <button class="gym-tab-btn${schedView==="timeline"?" active":""}" data-schedview="timeline">Timeline</button>
+ <button class="gym-tab-btn${schedView==="nightly"?" active":""}" data-schedview="nightly">Nightly Routine</button>
+ </div>`;
+
+ if(schedView==="nightly") return subnav+renderNightly();
+
+ return subnav+`
  <div class="hero">
  <div>
  <div class="hero-pts">${earned}</div>
@@ -905,6 +979,23 @@ function renderSchedule(){
  <input type="number" id="bonus-pts" value="1" min="1"/>
  <button class="add-btn" id="bonus-add">+</button>
  </div>
+
+ ${viewingToday?`
+ <button class="complete-btn" id="log-sched-btn" ${(S.schedLog||[]).some(h=>h.date===t)?'style="opacity:.6"':''}>
+ ${(S.schedLog||[]).some(h=>h.date===t)?"Day logged ✓ — tap to update":"Log today's schedule"}
+ </button>`:""}
+
+ ${(S.schedLog||[]).length?`
+ <div class="stitle">Schedule history</div>
+ ${S.schedLog.slice().reverse().slice(0,7).map(h=>`
+ <div class="money-entry">
+ <div style="flex:1">
+ <div class="money-entry-name">${h.date}${h.hit?' <span style="color:var(--gold)">✦</span>':''}</div>
+ <div class="money-entry-date">${h.done}/${h.total} done</div>
+ </div>
+ <div class="money-entry-amt in">${h.pts} pts</div>
+ </div>`).join("")}
+ `:""}
  `;
 }
 
@@ -913,7 +1004,7 @@ function tRow(a,done,canCheck){
  return`<div class="t-row${now?" now":""}">
  <div class="t-time">${fmtRange(a.start,a.end)}</div>
  ${canCheck
- ?`<button class="t-check${done?" done":""}" data-act="${a.id}">${done?"":""}</button>`
+ ?`<button class="t-check${done?" done":""}" data-act="${a.id}">${done?"✓":""}</button>`
  :`<span class="t-check" style="opacity:.25;cursor:default"></span>`}
  <span class="t-name${done?" done":""}">${esc(a.text)}</span>
  <span class="pts-chip">+${a.pts}pt</span>
@@ -1508,6 +1599,100 @@ function openQtyPicker(idx){
   draw();
 }
 
+// ─── NIGHTLY ROUTINE (inside Schedule) ───────────────────────────────────────
+function renderNightly(){
+  const t=today(), dow=todayDow();
+  const done=S.nightly.log[t]||[];
+  const isStrongDay=(dow===1||dow===3||dow===5); // Mon/Wed/Fri
+  const steps=S.nightly.steps.filter(s=>{
+    if(s.dayType==="all") return true;
+    if(s.dayType==="strong") return isStrongDay;
+    if(s.dayType==="serum") return !isStrongDay;
+    if(s.dayType==="sunday") return dow===0;
+    return true;
+  });
+  const massages=S.nightly.massages;
+  const exs=S.nightly.exercises;
+  const allItems=[...steps,...massages,...exs];
+  const totalItems=allItems.length;
+  const doneCount=allItems.filter(x=>done.includes(x.id)).length;
+  const pct=totalItems?Math.round(doneCount/totalItems*100):0;
+  const alreadyLogged=(S.nightly.history||[]).some(h=>h.date===t);
+
+  const stepRow=(item,idx)=>`
+    <div class="t-row">
+      <button class="t-check${done.includes(item.id)?" done":""}" data-night="${item.id}">${done.includes(item.id)?"✓":""}</button>
+      <div style="flex:1">
+        <div class="t-name${done.includes(item.id)?" done":""}">${idx!=null?`<span style="color:var(--gold);font-family:'Cormorant Garamond',serif;font-weight:600;margin-right:6px">${idx}</span>`:""}${esc(item.name)}</div>
+        <div style="font-family:'EB Garamond',serif;font-style:italic;font-size:.76rem;color:var(--muted);margin-top:2px;line-height:1.4">${esc(item.note)}</div>
+      </div>
+    </div>`;
+
+  return`
+    <div class="hero" style="display:block">
+      <div class="hero-label" style="margin-top:0">Tonight's Glow-Up</div>
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:6px">
+        <div class="hero-pts" style="font-size:2.6rem">${doneCount}<span style="font-size:1.2rem;color:var(--muted)">/${totalItems}</span></div>
+        <div class="goal-label">${pct===100?"All done — glowing":`${pct}% complete`}</div>
+      </div>
+      <div class="bar-wrap"><div class="bar-fill green" style="width:${pct}%"></div></div>
+      <div style="font-family:'EB Garamond',serif;font-style:italic;font-size:.8rem;color:var(--muted)">${isStrongDay?"Strong cream night (Mon · Wed · Fri)":"Serum night (Tue · Thu · weekends)"}</div>
+    </div>
+
+    <div class="stitle">Skincare — in order</div>
+    ${steps.map((s,i)=>stepRow(s,i+1)).join("")}
+
+    <div class="stitle">Face Massage</div>
+    ${massages.map(m=>stepRow(m,null)).join("")}
+
+    <div class="stitle">Face &amp; Jaw Exercises</div>
+    ${exs.map(e=>stepRow(e,null)).join("")}
+
+    <button class="complete-btn" id="log-nightly-btn" ${alreadyLogged?'style="opacity:.6"':''}>
+      ${alreadyLogged?"Routine logged for today ✓":"Log tonight's routine"}
+    </button>
+
+    ${(S.nightly.history||[]).length?`
+      <div class="stitle">History</div>
+      ${S.nightly.history.slice().reverse().slice(0,7).map(h=>`
+        <div class="money-entry">
+          <div class="money-entry-name" style="flex:1">${h.date}</div>
+          <div class="money-entry-amt in">${h.done}/${h.total} done</div>
+        </div>`).join("")}
+    `:""}
+
+    <div class="empty-state" style="margin-top:14px;text-align:left;font-style:normal">
+      <b style="font-family:'Cormorant Garamond',serif;letter-spacing:.05em">A note on results:</b><br>
+      Face massage de-puffs and boosts circulation for a real but temporary glow — a refresh, not a facelift. Exercises tone muscle over 8-20 weeks of daily practice but won't reshape bone or spot-reduce fat. Always glide massages with oil or moisturizer so you don't tug the skin. Consistency plus good sleep, hydration, and staying lean is what actually moves the needle.
+    </div>
+  `;
+}
+
+function attachNightlyHandlers(){
+  const t=today();
+  if(!S.nightly.log[t]) S.nightly.log[t]=[];
+  document.querySelectorAll("[data-night]").forEach(el=>el.onclick=()=>{
+    const id=el.dataset.night;
+    const log=S.nightly.log[t];
+    const i=log.indexOf(id);
+    if(i>=0) log.splice(i,1); else log.push(id);
+    save(); renderContent();
+  });
+  const logBtn=document.getElementById("log-nightly-btn");
+  if(logBtn) logBtn.onclick=()=>{
+    const dow=todayDow();
+    const isStrongDay=(dow===1||dow===3||dow===5);
+    const steps=S.nightly.steps.filter(s=>s.dayType==="all"||(s.dayType==="strong"&&isStrongDay)||(s.dayType==="serum"&&!isStrongDay));
+    const total=steps.length+S.nightly.massages.length+S.nightly.exercises.length;
+    const done=(S.nightly.log[t]||[]).length;
+    if(!S.nightly.history) S.nightly.history=[];
+    const existing=S.nightly.history.find(h=>h.date===t);
+    if(existing){existing.done=done;existing.total=total;}
+    else S.nightly.history.push({date:t,done,total});
+    save(); renderContent();
+  };
+}
+
 // ─── WISHLIST TAB ────────────────────────────────────────────────────────────
 let wishCat="All";
 let wishFormOpen=false;
@@ -1632,15 +1817,17 @@ function renderProgress(){
   const activeGoal=m.goals.find(g=>g.id===m.activeGoalId&&!g.done);
   const subnav=`
     <div class="gym-tab-btns">
-      <button class="gym-tab-btn${progView==="overview"?" active":""}" data-pview="overview" style="${progView==="overview"?"border-color:rgba(77,221,204,0.3);background:var(--accent-g);color:var(--accent)":""}">Overview</button>
-      <button class="gym-tab-btn${progView==="goal"?" active":""}" data-pview="goal" style="${progView==="goal"?"border-color:rgba(77,221,204,0.3);background:var(--accent-g);color:var(--accent)":""}">Goal</button>
-      <button class="gym-tab-btn${progView==="gigs"?" active":""}" data-pview="gigs" style="${progView==="gigs"?"border-color:rgba(77,221,204,0.3);background:var(--accent-g);color:var(--accent)":""}">Gigs</button>
-      <button class="gym-tab-btn${progView==="savings"?" active":""}" data-pview="savings" style="${progView==="savings"?"border-color:rgba(77,221,204,0.3);background:var(--accent-g);color:var(--accent)":""}">Savings</button>
+      <button class="gym-tab-btn${progView==="overview"?" active":""}" data-pview="overview">Overview</button>
+      <button class="gym-tab-btn${progView==="goal"?" active":""}" data-pview="goal">Goal</button>
+      <button class="gym-tab-btn${progView==="gigs"?" active":""}" data-pview="gigs">Gigs</button>
+      <button class="gym-tab-btn${progView==="savings"?" active":""}" data-pview="savings">Savings</button>
+      <button class="gym-tab-btn${progView==="wishlist"?" active":""}" data-pview="wishlist">Wishlist</button>
     </div>`;
 
   if(progView==="goal") return subnav+progGoalPage();
   if(progView==="gigs") return subnav+progGigsPage();
   if(progView==="savings") return subnav+progSavingsPage();
+  if(progView==="wishlist") return subnav+renderWishlist();
 
   // ── OVERVIEW ──
   const goalPct=activeGoal?Math.min(100,Math.round(activeGoal.saved/activeGoal.target*100)):0;
@@ -1814,6 +2001,17 @@ function attachProgressHandlers(){
 
 function renderWeek(){
  const now=new Date(), dow=todayDow(), t=today();
+
+ const subnav=`
+ <div class="gym-tab-btns">
+ <button class="gym-tab-btn${weekView==="stats"?" active":""}" data-weekview="stats">Stats</button>
+ <button class="gym-tab-btn${weekView==="journal"?" active":""}" data-weekview="journal">Journal</button>
+ <button class="gym-tab-btn${weekView==="focus"?" active":""}" data-weekview="focus">Focus</button>
+ </div>`;
+
+ if(weekView==="journal") return subnav+renderJournal();
+ if(weekView==="focus") return subnav+renderFocus();
+
  const days=[];
  for(let i=6;i>=0;i--){
  const d=new Date(now); d.setDate(now.getDate()-i);
@@ -1835,7 +2033,7 @@ function renderWeek(){
  +(S.activities[dow]||[]).filter(a=>(S.completions[t]||[]).includes(a.id)).length
  +(S.bonus||[]).filter(a=>(S.completions[t]||[]).includes(a.id)).length;
 
- return`
+ return subnav+`
  <div class="stitle">Past 7 days</div>
  <div class="week-grid">
  ${days.map(d=>`<div class="w-cell${d.isT?" today":""}">
@@ -1914,8 +2112,11 @@ function attachHandlers(){
  if(tab==="gym"){ attachGymHandlers(); return; }
  if(tab==="nutrition"){ attachNutritionHandlers(); return; }
  if(tab==="wishlist"){ attachWishlistHandlers(); return; }
- if(tab==="progress"){ attachProgressHandlers(); return; }
+ if(tab==="progress"){ attachProgressHandlers(); if(progView==="wishlist") attachWishlistHandlers(); return; }
  if(tab==="schedule"){
+ // sub-nav (Timeline / Nightly Routine)
+ document.querySelectorAll("[data-schedview]").forEach(el=>el.onclick=()=>{schedView=el.dataset.schedview;renderContent();});
+ if(schedView==="nightly"){ attachNightlyHandlers(); return; }
  const t=today(), dow=todayDow();
  const viewingToday=selDay===dow;
  // Ensures today has an editable override copy (so weekly template stays intact)
@@ -1979,20 +2180,37 @@ function attachHandlers(){
  document.getElementById("notif-btn").onclick=requestNotif;
  // ics btn
  document.getElementById("ics-btn").onclick=downloadICS;
- }
-
- if(tab==="journal"){
- const ta=document.getElementById("j-area");
- ta.oninput=()=>{
- S.journal[today()]=ta.value; save();
- const note=document.getElementById("saved-note");
- note.classList.add("show");
- clearTimeout(jTimer);
- jTimer=setTimeout(()=>note.classList.remove("show"),1500);
+ // log schedule btn
+ const logSchedBtn=document.getElementById("log-sched-btn");
+ if(logSchedBtn) logSchedBtn.onclick=()=>{
+ const t2=today(), dow2=todayDow();
+ const acts2=(S.dayOverrides[t2])?S.dayOverrides[t2]:(S.activities[dow2]||[]);
+ const allToday=acts2.concat(S.bonus||[]);
+ const comp2=S.completions[t2]||[];
+ const doneItems=allToday.filter(a=>comp2.includes(a.id));
+ const pts=doneItems.reduce((s,a)=>s+a.pts,0);
+ const entry={date:t2,done:doneItems.length,total:acts2.length,pts,hit:pts>=S.target};
+ if(!S.schedLog) S.schedLog=[];
+ const ex=S.schedLog.find(h=>h.date===t2);
+ if(ex){Object.assign(ex,entry);} else {S.schedLog.push(entry);}
+ save(); renderContent();
  };
  }
 
- if(tab==="focus"){
+ if(tab==="week"){
+ // sub-nav
+ document.querySelectorAll("[data-weekview]").forEach(el=>el.onclick=()=>{weekView=el.dataset.weekview;renderContent();});
+ if(weekView==="journal"){
+ const ta=document.getElementById("j-area");
+ if(ta) ta.oninput=()=>{
+ S.journal[today()]=ta.value; save();
+ const note=document.getElementById("saved-note");
+ if(note){note.classList.add("show");
+ clearTimeout(jTimer);
+ jTimer=setTimeout(()=>note.classList.remove("show"),1500);}
+ };
+ }
+ if(weekView==="focus"){
  document.getElementById("pomo-toggle").onclick=togglePomo;
  document.getElementById("pomo-reset").onclick=resetPomo;
  document.querySelectorAll("[data-pmode]").forEach(el=>el.onclick=()=>{
@@ -2001,6 +2219,7 @@ function attachHandlers(){
  pomoState.secs=(pomoState.mode==="work"?S.pomo.workMin:S.pomo.breakMin)*60;
  renderContent();
  });
+ }
  }
 }
 
@@ -2026,7 +2245,7 @@ function togglePomo(){
  pomoState.secs=(pomoState.mode==="work"?S.pomo.workMin:S.pomo.breakMin)*60;
  showNotif("Prodo ⏰",pomoState.mode==="break"?"Break! ":"Back to focus ");
  }
- if(tab==="focus")renderContent();
+ if(tab==="week"&&weekView==="focus")renderContent();
  },1000);
  }
  renderContent();
