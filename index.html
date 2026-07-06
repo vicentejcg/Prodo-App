@@ -743,7 +743,52 @@ function load() {
  try { const r=localStorage.getItem(KEY); if(r) return JSON.parse(r); } catch(e){}
  return defaultData();
 }
-function save() { localStorage.setItem(KEY,JSON.stringify(S)); }
+
+// ─── CLOUD SYNC (JSONBin.io) ─────────────────────────────────────────────────
+const CLOUD={
+ binId:"6a4c14deda38895dfe377730",
+ key:"$2a$10$PCmrcKPGE7sxK51IBkR2m0gdrLbfw6J3DCbBx.7vMVUhON8Y.vN2K",
+ url:"https://api.jsonbin.io/v3/b/6a4c14deda38895dfe377730"
+};
+let cloudTimer=null;
+let cloudStatus="idle"; // idle | saving | saved | offline
+function cloudPush(){
+ // debounce: wait 2s after the last change before uploading
+ clearTimeout(cloudTimer);
+ cloudTimer=setTimeout(async()=>{
+  try{
+   cloudStatus="saving"; updateCloudBadge();
+   const res=await fetch(CLOUD.url,{
+    method:"PUT",
+    headers:{"Content-Type":"application/json","X-Access-Key":CLOUD.key},
+    body:JSON.stringify({state:S,savedAt:Date.now()})
+   });
+   cloudStatus=res.ok?"saved":"offline"; updateCloudBadge();
+  }catch(e){ cloudStatus="offline"; updateCloudBadge(); }
+ },2000);
+}
+async function cloudPull(){
+ try{
+  const res=await fetch(CLOUD.url+"/latest",{headers:{"X-Access-Key":CLOUD.key}});
+  if(!res.ok) return null;
+  const json=await res.json();
+  // JSONBin wraps the data in .record
+  const rec=json.record||json;
+  return rec&&rec.state?rec.state:null;
+ }catch(e){ return null; }
+}
+function updateCloudBadge(){
+ const b=document.getElementById("cloud-badge");
+ if(!b) return;
+ const map={idle:"",saving:"Saving…",saved:"Synced ✓",offline:"Offline"};
+ b.textContent=map[cloudStatus]||"";
+ b.style.color=cloudStatus==="offline"?"var(--burgundy)":cloudStatus==="saved"?"var(--gold)":"var(--muted)";
+}
+
+function save() {
+ localStorage.setItem(KEY,JSON.stringify(S)); // local backup (works offline)
+ cloudPush();                                  // push to cloud (debounced)
+}
 
 let S = load();
 // migrate missing fields
@@ -876,7 +921,7 @@ function render(){
  <div class="brand-line">
  <div>
  <div class="brand-name">Prodo</div>
- <div class="brand-sub">Personal OS</div>
+ <div class="brand-sub">Personal OS <span id="cloud-badge" style="font-family:'JetBrains Mono',monospace;font-size:.85em;margin-left:6px"></span></div>
  </div>
  <div class="header-date">
  <div class="date-day">${new Date().toLocaleDateString(undefined,{weekday:"short"})}</div>
@@ -2320,8 +2365,37 @@ function downloadICS(){
 function esc(s){const d=document.createElement("div");d.textContent=s;return d.innerHTML;}
 
 // ─── INIT ────────────────────────────────────────────────────────────────────
-render();
-if(S.notifEnabled&&"Notification"in window&&Notification.permission==="granted") scheduleNotifs();
+async function initApp(){
+ // Try to load the latest state from the cloud first
+ const cloudState=await cloudPull();
+ if(cloudState){
+  S=cloudState;
+  // re-run the same migrations so cloud data gets any new fields
+  if(!S.bonus) S.bonus=defaultData().bonus;
+  if(!S.pomo) S.pomo=defaultData().pomo;
+  if(!S.completions) S.completions={};
+  if(!S.journal) S.journal={};
+  if(!S.dayHistory) S.dayHistory={};
+  if(S.streak===undefined) S.streak=0;
+  if(!S.gym) S.gym=defaultData().gym;
+  if(!S.dayOverrides) S.dayOverrides={};
+  if(!S.schedLog) S.schedLog=[];
+  if(!S.gym.gymLog) S.gym.gymLog={};
+  if(!S.gym.prs) S.gym.prs={};
+  if(!S.gym.attendance) S.gym.attendance=[];
+  if(!S.nutrition) S.nutrition=defaultData().nutrition;
+  if(!S.nutrition.weightLog) S.nutrition.weightLog=[];
+  if(!S.wishlist) S.wishlist=defaultData().wishlist;
+  if(!S.money) S.money=defaultData().money;
+  if(!S.nightly) S.nightly=defaultData().nightly;
+  if(!S.nightly.history) S.nightly.history=[];
+  localStorage.setItem(KEY,JSON.stringify(S));
+ }
+ render();
+ updateCloudBadge();
+ if(S.notifEnabled&&"Notification"in window&&Notification.permission==="granted") scheduleNotifs();
+}
+initApp();
 setInterval(()=>{if(tab==="schedule")renderContent();},60000);
 </script>
 </body>
