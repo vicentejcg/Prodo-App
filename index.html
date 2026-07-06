@@ -754,15 +754,27 @@ const CLOUD={
 };
 let cloudTimer=null;
 let cloudStatus="idle"; // idle | saving | saved | offline
+let cloudReady=false;
+
+// Make the bin public once (so reads/writes work reliably from the browser).
+async function cloudMakePublic(){
+ try{
+  await fetch(CLOUD.url+"/meta/privacy",{
+   method:"PUT",
+   headers:{"Content-Type":"application/json","X-Master-Key":CLOUD.key,"X-Bin-Private":"false"},
+   body:JSON.stringify({})
+  });
+ }catch(e){}
+}
+
 function cloudPush(){
- // debounce: wait 2s after the last change before uploading
  clearTimeout(cloudTimer);
  cloudTimer=setTimeout(async()=>{
   try{
    cloudStatus="saving"; updateCloudBadge();
    const res=await fetch(CLOUD.url,{
     method:"PUT",
-    headers:{"Content-Type":"application/json",[CLOUD.keyHeader]:CLOUD.key},
+    headers:{"Content-Type":"application/json","X-Master-Key":CLOUD.key},
     body:JSON.stringify({state:S,savedAt:Date.now()})
    });
    cloudStatus=res.ok?"saved":"offline"; updateCloudBadge();
@@ -771,10 +783,9 @@ function cloudPush(){
 }
 async function cloudPull(){
  try{
-  const res=await fetch(CLOUD.url+"/latest",{headers:{[CLOUD.keyHeader]:CLOUD.key}});
+  const res=await fetch(CLOUD.url+"/latest",{headers:{"X-Master-Key":CLOUD.key}});
   if(!res.ok) return null;
   const json=await res.json();
-  // JSONBin wraps the data in .record
   const rec=json.record||json;
   return rec&&rec.state?rec.state:null;
  }catch(e){ return null; }
@@ -2368,7 +2379,9 @@ function esc(s){const d=document.createElement("div");d.textContent=s;return d.i
 
 // ─── INIT ────────────────────────────────────────────────────────────────────
 async function initApp(){
- // Try to load the latest state from the cloud first
+ // First, make the bin public (fixes 401 on private bins from the browser)
+ await cloudMakePublic();
+ // Then load the latest state from the cloud
  const cloudState=await cloudPull();
  if(cloudState){
   S=cloudState;
