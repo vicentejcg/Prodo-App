@@ -748,7 +748,8 @@ function load() {
 // ─── CLOUD SYNC (JSONBin.io) ─────────────────────────────────────────────────
 const CLOUD={
  binId:"6a4c1c04f5f4af5e296927ba",
- key:"$2a$10$PCmrcKPGE7sxK51IBkR2m0gdrLbfw6J3DCbBx.7vMVUhON8Y.vN2K",
+ key:"$2a$10$pX5dcQkKSdCdQY/XpBvOK.2GszaUZMoDF08P8OQ9LpYxdVOP/n4ju",
+ keyHeader:"X-Master-Key",
  url:"https://api.jsonbin.io/v3/b/6a4c1c04f5f4af5e296927ba"
 };
 let cloudTimer=null;
@@ -761,7 +762,7 @@ function cloudPush(){
    cloudStatus="saving"; updateCloudBadge();
    const res=await fetch(CLOUD.url,{
     method:"PUT",
-    headers:{"Content-Type":"application/json","X-Access-Key":CLOUD.key},
+    headers:{"Content-Type":"application/json",[CLOUD.keyHeader]:CLOUD.key},
     body:JSON.stringify({state:S,savedAt:Date.now()})
    });
    cloudStatus=res.ok?"saved":"offline"; updateCloudBadge();
@@ -770,7 +771,7 @@ function cloudPush(){
 }
 async function cloudPull(){
  try{
-  const res=await fetch(CLOUD.url+"/latest",{headers:{"X-Access-Key":CLOUD.key}});
+  const res=await fetch(CLOUD.url+"/latest",{headers:{[CLOUD.keyHeader]:CLOUD.key}});
   if(!res.ok) return null;
   const json=await res.json();
   // JSONBin wraps the data in .record
