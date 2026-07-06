@@ -508,6 +508,7 @@ function defaultData() {
  {id:"mo3",text:"Healthy breakfast",pts:3,start:"09:30",end:"10:00"},
  {id:"mo4",text:"Walk",pts:3,start:"11:00",end:"11:45"},
  {id:"mo5",text:"Gym",pts:5,start:"12:00",end:"13:00"},
+ {id:"mo5b",text:"Sauna",pts:2,start:"13:00",end:"13:10"},
  {id:"mo6",text:"Work on business",pts:3,start:"14:00",end:"16:00"},
  {id:"mo7",text:"Evening wind-down",pts:1,start:"18:00",end:"20:00"},
  {id:"mo8",text:"Healthy dinner",pts:2,start:"20:00",end:"20:30"},
@@ -538,6 +539,7 @@ function defaultData() {
  {id:"we3",text:"Healthy breakfast",pts:3,start:"09:30",end:"10:00"},
  {id:"we4",text:"Walk",pts:3,start:"11:00",end:"11:45"},
  {id:"we5",text:"Gym",pts:5,start:"12:00",end:"13:00"},
+ {id:"we5b",text:"Sauna",pts:2,start:"13:00",end:"13:10"},
  {id:"we6",text:"Work on business",pts:3,start:"14:00",end:"16:00"},
  {id:"we7",text:"Evening wind-down",pts:1,start:"18:00",end:"20:00"},
  {id:"we8",text:"Healthy dinner",pts:2,start:"20:00",end:"20:30"},
@@ -568,6 +570,7 @@ function defaultData() {
  {id:"fr3",text:"Healthy breakfast",pts:3,start:"09:30",end:"10:00"},
  {id:"fr4",text:"Walk",pts:3,start:"11:00",end:"11:45"},
  {id:"fr5",text:"Gym",pts:5,start:"12:00",end:"13:00"},
+ {id:"fr5b",text:"Sauna",pts:2,start:"13:00",end:"13:10"},
  {id:"fr6",text:"Work on business",pts:3,start:"14:00",end:"16:00"},
  {id:"fr7",text:"Evening wind-down",pts:1,start:"18:00",end:"20:00"},
  {id:"fr8",text:"Healthy dinner",pts:2,start:"20:00",end:"20:30"},
@@ -617,6 +620,7 @@ function defaultData() {
  steps:[
  {id:"n1",name:"Cleanse face",note:"Wash away the day's dirt & oil with a gentle cleanser",dayType:"all"},
  {id:"n9",name:"Shave",note:"Sunday only — shave after cleansing on clean, soft skin",dayType:"sunday"},
+ {id:"n10",name:"Ice roller",note:"On clean skin, roll upward & outward 1-2 min. De-puffs & preps skin to absorb products",dayType:"all"},
  {id:"n2",name:"Face mask",note:"2-3x a week is plenty — clay for oil, sheet for hydration",dayType:"all"},
  {id:"n4",name:"Strong cream (retinol/actives)",note:"Mon · Wed · Fri only — never stack with acids same night",dayType:"strong"},
  {id:"n5",name:"Serum",note:"Tue · Thu · weekends — hydrating or brightening",dayType:"serum"},
@@ -752,12 +756,12 @@ if(S.streak===undefined) S.streak=0;
 if(!S.gym) S.gym=defaultData().gym;
 if(!S.dayOverrides) S.dayOverrides={};
 if(!S.schedLog) S.schedLog=[];
-// ── v4 migration: new gym split + Tue/Thu schedule + water reminders (keeps logs, journal, food, progress) ──
-if(S._structVer!==4){
+// ── v5 migration: add sauna after gym Mon/Wed/Fri (keeps logs, journal, food, progress) ──
+if(S._structVer!==5){
  const def=defaultData();
- S.activities=def.activities;   // refresh weekly schedule (adds water, removes tennis)
+ S.activities=def.activities;   // refresh weekly schedule (adds sauna + water)
  S.gym.routines=def.gym.routines; // new 5-day beginner weight-gain split
- S._structVer=4;
+ S._structVer=5;
  save();
 }
 if(!S.gym.gymLog) S.gym.gymLog={};
@@ -768,13 +772,13 @@ if(!S.wishlist) S.wishlist=defaultData().wishlist;
 if(!S.money) S.money=defaultData().money;
 if(!S.nightly) S.nightly=defaultData().nightly;
 // refresh nightly steps/massages/exercises to latest (keeps log + history)
-if(S._nightlyVer!==3){
+if(S._nightlyVer!==4){
  const dn=defaultData().nightly;
  S.nightly.steps=dn.steps;
  S.nightly.massages=dn.massages;
  S.nightly.exercises=dn.exercises;
  if(!S.nightly.history) S.nightly.history=[];
- S._nightlyVer=3;
+ S._nightlyVer=4;
  save();
 }
 if(!S.nutrition.weightLog) S.nutrition.weightLog=[];
