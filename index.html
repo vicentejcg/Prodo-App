@@ -207,7 +207,7 @@ select{color:var(--muted);cursor:pointer;font-size:16px}
 .stat-card{border-radius:var(--r);padding:12px 16px;margin-bottom:5px;display:flex;justify-content:space-between;align-items:center;font-size:.92rem;font-weight:400;color:var(--muted)}
 .stat-val{font-family:'Cormorant Garamond',serif;font-weight:700;color:var(--forest);font-size:1rem}
 
-/* ── JOURNAL ── */
+/* ── NOTES ── */
 .j-date{font-family:'Cormorant Garamond',serif;font-size:.82rem;font-weight:600;color:var(--forest);letter-spacing:.16em;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:12px}
 .j-date::before{content:"";width:5px;height:5px;background:var(--gold);border-radius:50%}
 .j-date::after{content:"";flex:1;height:1px;background:var(--line2)}
@@ -217,6 +217,8 @@ textarea{width:100%;min-height:180px;resize:vertical;border-radius:var(--r2);lin
 .j-prev{border-radius:var(--r);padding:13px 15px;margin-bottom:5px}
 .j-prev-date{font-family:'Cormorant Garamond',serif;font-size:.66rem;font-weight:600;color:var(--faint);text-transform:uppercase;letter-spacing:.14em;margin-bottom:5px}
 .j-prev-text{font-size:.9rem;color:var(--muted);font-weight:400;line-height:1.6}
+.note-row{align-items:flex-start}
+.note-date{font-family:'EB Garamond',serif;font-style:italic;font-size:.68rem;color:var(--faint);margin-top:3px}
 
 /* ── POMODORO ── */
 .pomo-wrap{display:flex;flex-direction:column;align-items:center;padding:28px 0 16px}
@@ -491,9 +493,6 @@ function defaultData() {
  activities: {
  0:[
  {id:"su_wake",text:"Wake up (9:00 AM)",pts:2},
- {id:"su_w1",text:"Drink water",pts:1},
- {id:"su_w2",text:"Drink water",pts:1},
- {id:"su_w3",text:"Drink water",pts:1},
  {id:"su1",text:"Skincare + brush teeth",pts:1},
  {id:"su2",text:"Healthy breakfast",pts:3},
  {id:"su3",text:"Going out",pts:8},
@@ -503,9 +502,6 @@ function defaultData() {
  ],
  1:[
  {id:"mo_wake",text:"Wake up (9:00 AM)",pts:2},
- {id:"mo_w1",text:"Drink water",pts:1},
- {id:"mo_w2",text:"Drink water",pts:1},
- {id:"mo_w3",text:"Drink water",pts:1},
  {id:"mo1",text:"Skincare + brush teeth",pts:1},
  {id:"mo2",text:"Take sun on balcony",pts:2},
  {id:"mo3",text:"Healthy breakfast",pts:3},
@@ -520,9 +516,6 @@ function defaultData() {
  ],
  2:[
  {id:"tu_wake",text:"Wake up (9:00 AM)",pts:2},
- {id:"tu_w1",text:"Drink water",pts:1},
- {id:"tu_w2",text:"Drink water",pts:1},
- {id:"tu_w3",text:"Drink water",pts:1},
  {id:"tu1",text:"Skincare + brush teeth",pts:1},
  {id:"tu2",text:"Take sun on balcony",pts:2},
  {id:"tu3",text:"Healthy breakfast",pts:3},
@@ -536,9 +529,6 @@ function defaultData() {
  ],
  3:[
  {id:"we_wake",text:"Wake up (9:00 AM)",pts:2},
- {id:"we_w1",text:"Drink water",pts:1},
- {id:"we_w2",text:"Drink water",pts:1},
- {id:"we_w3",text:"Drink water",pts:1},
  {id:"we1",text:"Skincare + brush teeth",pts:1},
  {id:"we2",text:"Take sun on balcony",pts:2},
  {id:"we3",text:"Healthy breakfast",pts:3},
@@ -553,9 +543,6 @@ function defaultData() {
  ],
  4:[
  {id:"th_wake",text:"Wake up (9:00 AM)",pts:2},
- {id:"th_w1",text:"Drink water",pts:1},
- {id:"th_w2",text:"Drink water",pts:1},
- {id:"th_w3",text:"Drink water",pts:1},
  {id:"th1",text:"Skincare + brush teeth",pts:1},
  {id:"th2",text:"Take sun on balcony",pts:2},
  {id:"th3",text:"Healthy breakfast",pts:3},
@@ -569,9 +556,6 @@ function defaultData() {
  ],
  5:[
  {id:"fr_wake",text:"Wake up (9:00 AM)",pts:2},
- {id:"fr_w1",text:"Drink water",pts:1},
- {id:"fr_w2",text:"Drink water",pts:1},
- {id:"fr_w3",text:"Drink water",pts:1},
  {id:"fr1",text:"Skincare + brush teeth",pts:1},
  {id:"fr2",text:"Take sun on balcony",pts:2},
  {id:"fr3",text:"Healthy breakfast",pts:3},
@@ -586,9 +570,6 @@ function defaultData() {
  ],
  6:[
  {id:"sa_wake",text:"Wake up (9:00 AM)",pts:2},
- {id:"sa_w1",text:"Drink water",pts:1},
- {id:"sa_w2",text:"Drink water",pts:1},
- {id:"sa_w3",text:"Drink water",pts:1},
  {id:"sa1",text:"Skincare + brush teeth",pts:1},
  {id:"sa2",text:"Healthy breakfast",pts:3},
  {id:"sa3",text:"Going out",pts:8},
@@ -616,6 +597,7 @@ function defaultData() {
  {id:"b16",text:"Random act of kindness",pts:1}
  ],
  completions:{},
+ notes:[],
  journal:{},
  dayHistory:{},
  schedLog:[],
@@ -624,7 +606,6 @@ function defaultData() {
  pomo:{workMin:25,breakMin:5,sessionsToday:0,lastDate:today()},
  notifEnabled:false,
  nightly:{
- // dayType: "all"=every day; "strong"=Mon/Wed/Fri; "serum"=Tue/Thu/Sat/Sun
  steps:[
  {id:"n1",name:"Cleanse face",note:"Wash away the day's dirt & oil with a gentle cleanser",dayType:"all"},
  {id:"n9",name:"Shave",note:"Sunday only — shave after cleansing on clean, soft skin",dayType:"sunday"},
@@ -636,7 +617,6 @@ function defaultData() {
  {id:"n7",name:"Hydration cream",note:"Seal everything in with your moisturizer",dayType:"all"},
  {id:"n8",name:"Eye bag cream",note:"Every day — gently pat around the eye, don't rub",dayType:"all"}
  ],
- // face massages (researched) — do after creams, glide with oil/moisturizer
  massages:[
  {id:"m1",name:"Neck drainage sweep",note:"Sweep hands/gua sha down sides of neck to collarbone. Opens lymph nodes. 5-6x each side"},
  {id:"m2",name:"Jawline sculpt",note:"From chin, glide outward to ears along the jaw. Light pressure. 5x each side"},
@@ -644,7 +624,6 @@ function defaultData() {
  {id:"m4",name:"Under-eye depuff",note:"Very light — sweep inner corner outward to ears, then down neck. 3-5x"},
  {id:"m5",name:"Forehead smooth",note:"From center of forehead sweep out to temples, then down to ears. 5x"}
  ],
- // face/jaw exercises (researched) — every day
  exercises:[
  {id:"e1",name:"Chin tucks",note:"Glide chin straight back (gentle double-chin). Hold 3s. 2 sets x 8-10"},
  {id:"e2",name:"Neck curl-ups",note:"Lying down, tongue on roof, lift head ~2in like a crunch. 3 sets x 10"},
@@ -652,22 +631,22 @@ function defaultData() {
  {id:"e4",name:"Vowel O-E",note:"Exaggerate 'O' then 'E' to work mouth & cheeks. 3 sets x 15"},
  {id:"e6",name:"Collarbone chin-in",note:"Head level, glide head back over shoulders to feel neck contract. 3 sets x 10"}
  ],
- log:{},        // { dateKey: [itemId, ...] } — today's checkmarks
- history:[]     // [{date, done, total}] — logged completed routines
+ log:{},
+ history:[]
  },
  wishlist:{
  categories:["Sweaters","Shirts","Hoodies","Accessories","Pants","Shoes","Electronics"],
- items:[]  // {id, cat, name, price, link, img}
+ items:[]
  },
  money:{
- goals:[],        // {id, name, target, saved, done}
+ goals:[],
  activeGoalId:null,
- gigs:[],         // {id, name, amount, date}
+ gigs:[],
  savings:0,
- savingsLog:[]    // {id, name, amount, date, type:"in"|"out"}
+ savingsLog:[]
  },
- physique:[],  // {id, month, front, back, side} — month like "2026-07", values are image dataURLs
- facePhotos:[], // {id, month, front, side}
+ physique:[],
+ facePhotos:[],
  nutrition:{
  calGoal:2800,
  proteinGoal:120,
@@ -679,7 +658,7 @@ function defaultData() {
  nutrView:"diary"
  },
  gym:{
- selView:"workout", // "workout" | "prs"
+ selView:"workout",
  routines:{
  1:{name:"Chest & Triceps",exercises:[
  {id:"g_mo1",name:"Barbell Bench Press",muscle:"Chest",sets:[{reps:8,done:false},{reps:8,done:false},{reps:8,done:false},{reps:8,done:false}]},
@@ -754,62 +733,26 @@ function load() {
  return defaultData();
 }
 
-// ─── CLOUD SYNC (JSONBin.io) ─────────────────────────────────────────────────
-const CLOUD={
- binId:"6a4c1c04f5f4af5e296927ba",
- key:"$2a$10$pX5dcQkKSdCdQY/XpBvOK.2GszaUZMoDF08P8OQ9LpYxdVOP/n4ju",
- keyHeader:"X-Master-Key",
- url:"https://api.jsonbin.io/v3/b/6a4c1c04f5f4af5e296927ba"
-};
-let cloudTimer=null;
-let cloudStatus="idle"; // idle | saving | saved | offline
-let cloudReady=false;
-
-// Make the bin public once (so reads/writes work reliably from the browser).
-async function cloudMakePublic(){
- try{
-  await fetch(CLOUD.url+"/meta/privacy",{
-   method:"PUT",
-   headers:{"Content-Type":"application/json","X-Master-Key":CLOUD.key,"X-Bin-Private":"false"},
-   body:JSON.stringify({})
-  });
- }catch(e){}
-}
-
-function cloudPush(){
- clearTimeout(cloudTimer);
- cloudTimer=setTimeout(async()=>{
-  try{
-   cloudStatus="saving"; updateCloudBadge();
-   const res=await fetch(CLOUD.url,{
-    method:"PUT",
-    headers:{"Content-Type":"application/json","X-Master-Key":CLOUD.key},
-    body:JSON.stringify({state:S,savedAt:Date.now()})
-   });
-   cloudStatus=res.ok?"saved":"offline"; updateCloudBadge();
-  }catch(e){ cloudStatus="offline"; updateCloudBadge(); }
- },2000);
-}
-async function cloudPull(){
- try{
-  const res=await fetch(CLOUD.url+"/latest",{headers:{"X-Master-Key":CLOUD.key}});
-  if(!res.ok) return null;
-  const json=await res.json();
-  const rec=json.record||json;
-  return rec&&rec.state?rec.state:null;
- }catch(e){ return null; }
-}
-function updateCloudBadge(){
- const b=document.getElementById("cloud-badge");
- if(!b) return;
- const map={idle:"",saving:"Saving…",saved:"Synced ✓",offline:"Offline"};
- b.textContent=map[cloudStatus]||"";
- b.style.color=cloudStatus==="offline"?"var(--burgundy)":cloudStatus==="saved"?"var(--gold)":"var(--muted)";
-}
-
+// ─── LOCAL SAVE (no cloud — data lives safely in this device's browser) ───────
 function save() {
- localStorage.setItem(KEY,JSON.stringify(S)); // local backup (works offline)
- cloudPush();                                  // push to cloud (debounced)
+ try { localStorage.setItem(KEY,JSON.stringify(S)); } catch(e){}
+}
+
+// Export all data as a text string (for manual backups)
+function exportData(){
+ return JSON.stringify(S);
+}
+// Import data from a backup string
+function importData(str){
+ try{
+  const data=JSON.parse(str);
+  if(data && typeof data==="object"){
+   S=data;
+   save();
+   return true;
+  }
+ }catch(e){}
+ return false;
 }
 
 let S = load();
@@ -824,11 +767,22 @@ if(!S.gym) S.gym=defaultData().gym;
 if(!S.dayOverrides) S.dayOverrides={};
 if(!S.schedLog) S.schedLog=[];
 // ── v6 migration: schedule without fixed times (keeps logs, journal, food, progress) ──
-if(S._structVer!==6){
+if(S._structVer!==6 && S._structVer!==7){
  const def=defaultData();
  S.activities=def.activities;
  S.gym.routines=def.gym.routines;
  S._structVer=6;
+ save();
+}
+// ── v7 migration: remove all "Drink water" tasks (free points) everywhere ──
+if(S._structVer!==7){
+ Object.keys(S.activities||{}).forEach(d=>{
+  S.activities[d]=(S.activities[d]||[]).filter(a=>!/drink water/i.test(a.text||""));
+ });
+ Object.keys(S.dayOverrides||{}).forEach(k=>{
+  S.dayOverrides[k]=(S.dayOverrides[k]||[]).filter(a=>!/drink water/i.test(a.text||""));
+ });
+ S._structVer=7;
  save();
 }
 if(!S.gym.gymLog) S.gym.gymLog={};
@@ -855,15 +809,125 @@ if(!S.nutrition.history) S.nutrition.history=[];
 if(!S.nutrition.nutrView) S.nutrition.nutrView="diary";
 if(!S.nutrition.proteinGoal) S.nutrition.proteinGoal=120;
 if(!S.nutrition.bodyweightKg) S.nutrition.bodyweightKg=59;
+// ── Notes (replaces Journal) ──
+if(!S.notes) S.notes=[];
+// one-time: convert old journal entries into notes so nothing is lost
+if(!S._journalToNotes){
+ Object.keys(S.journal||{}).sort().forEach(k=>{
+  const txt=(S.journal[k]||"").trim();
+  if(txt) S.notes.push({id:"note_"+k,text:txt,date:k,done:false});
+ });
+ S._journalToNotes=true;
+ save();
+}
 
-// new day check
+// ── One-time restore of Vicente's logged progress (Jul 6-7-8) ──
+if(!S._restoredJul8){
+ const days=["2026-07-06","2026-07-07","2026-07-08"];
+ if(!S.gym.attendance) S.gym.attendance=[];
+ days.forEach(d=>{ if(!S.gym.attendance.includes(d)) S.gym.attendance.push(d); });
+ if(!S.schedLog) S.schedLog=[];
+ days.forEach(d=>{
+  if(!S.schedLog.find(h=>h.date===d)){
+   const dow=new Date(d+"T12:00:00").getDay();
+   const acts=(S.activities[dow]||[]);
+   const totalPts=acts.reduce((s,a)=>s+a.pts,0);
+   S.schedLog.push({date:d,done:acts.length,total:acts.length,pts:totalPts,hit:true});
+  }
+ });
+ if(!S.nightly.history) S.nightly.history=[];
+ days.forEach(d=>{
+  if(!S.nightly.history.find(h=>h.date===d)){
+   const dow=new Date(d+"T12:00:00").getDay();
+   const isStrong=(dow===1||dow===3||dow===5);
+   const steps=S.nightly.steps.filter(s=>s.dayType==="all"||(s.dayType==="strong"&&isStrong)||(s.dayType==="serum"&&!isStrong)||(s.dayType==="sunday"&&dow===0));
+   const total=steps.length+S.nightly.massages.length+S.nightly.exercises.length;
+   S.nightly.history.push({date:d,done:total,total:total});
+  }
+ });
+ if(!S.nutrition.history) S.nutrition.history=[];
+ days.forEach(d=>{
+  if(!S.nutrition.history.find(h=>h.date===d)){
+   S.nutrition.history.push({date:d,cals:S.nutrition.calGoal,protein:S.nutrition.proteinGoal,items:4});
+  }
+ });
+ S._restoredJul8=true;
+ save();
+}
+
+// ── One-time fix: put those 3 days into Week → Stats (dayHistory) + streak ──
+if(!S._restoredStats){
+ const days=["2026-07-06","2026-07-07","2026-07-08"];
+ if(!S.dayHistory) S.dayHistory={};
+ days.forEach(d=>{
+  const dow=new Date(d+"T12:00:00").getDay();
+  const n=(S.activities[dow]||[]).length;
+  if(n>0) S.dayHistory[d]={done:n,total:n};
+ });
+ // also fix schedLog counts in case they included the old water tasks
+ (S.schedLog||[]).forEach(h=>{
+  if(days.includes(h.date)){
+   const dow=new Date(h.date+"T12:00:00").getDay();
+   const acts=(S.activities[dow]||[]);
+   h.done=acts.length; h.total=acts.length;
+   h.pts=acts.reduce((s,a)=>s+a.pts,0); h.hit=true;
+  }
+ });
+ // 3 consecutive full days = 3-day streak going into today
+ if(S.streak<3){ S.streak=3; S.lastStreakDate="2026-07-08"; }
+ S._restoredStats=true;
+ save();
+}
+
+// ── One-time restore of Thursday Jul 9 (did everything) across all sections ──
+if(!S._restoredJul9){
+ const d="2026-07-09";
+ const dow=new Date(d+"T12:00:00").getDay();
+ // Gym attendance
+ if(!S.gym.attendance.includes(d)) S.gym.attendance.push(d);
+ // Schedule log (full day)
+ const acts=(S.activities[dow]||[]);
+ if(!S.schedLog.find(h=>h.date===d)){
+  S.schedLog.push({date:d,done:acts.length,total:acts.length,pts:acts.reduce((s,a)=>s+a.pts,0),hit:true});
+ }
+ // Week → Stats
+ if(!S.dayHistory) S.dayHistory={};
+ if(acts.length) S.dayHistory[d]={done:acts.length,total:acts.length};
+ // Nightly routine
+ if(!S.nightly.history.find(h=>h.date===d)){
+  const isStrong=(dow===1||dow===3||dow===5);
+  const steps=S.nightly.steps.filter(s=>s.dayType==="all"||(s.dayType==="strong"&&isStrong)||(s.dayType==="serum"&&!isStrong)||(s.dayType==="sunday"&&dow===0));
+  const total=steps.length+S.nightly.massages.length+S.nightly.exercises.length;
+  S.nightly.history.push({date:d,done:total,total});
+ }
+ // Nutrition
+ if(!S.nutrition.history.find(h=>h.date===d)){
+  S.nutrition.history.push({date:d,cals:S.nutrition.calGoal,protein:S.nutrition.proteinGoal,items:4});
+ }
+ // Extend streak to include Thursday (now 4 consecutive: Jul 6-7-8-9)
+ if(S.streak<4){ S.streak=4; S.lastStreakDate=d; }
+ S._restoredJul9=true;
+ save();
+}
+
+// new day check — now AUTO-SAVES each finished day into Stats & history
 (function(){
  const last=S._lastOpen, t=today();
  if(last && last!==t) {
  const dow=new Date(last+"T12:00:00").getDay();
- const acts=(S.activities[dow]||[]).concat(S.bonus||[]);
+ const base=(S.dayOverrides&&S.dayOverrides[last])?S.dayOverrides[last]:(S.activities[dow]||[]);
+ const acts=base.concat(S.bonus||[]);
  const comp=S.completions[last]||[];
- const earned=acts.filter(a=>comp.includes(a.id)).reduce((s,a)=>s+a.pts,0);
+ const doneItems=acts.filter(a=>comp.includes(a.id));
+ const earned=doneItems.reduce((s,a)=>s+a.pts,0);
+ // auto-save into Week → Stats
+ if(!S.dayHistory) S.dayHistory={};
+ if(!S.dayHistory[last]) S.dayHistory[last]={done:doneItems.length,total:acts.length};
+ // auto-save into Schedule history if it wasn't logged manually
+ if(!S.schedLog) S.schedLog=[];
+ if(!S.schedLog.find(h=>h.date===last)){
+  S.schedLog.push({date:last,done:doneItems.length,total:base.length,pts:earned,hit:earned>=S.target});
+ }
  if(earned>=S.target){
  const prev=S.lastStreakDate;
  if(!prev||isConsec(prev,last)) S.streak++;
@@ -888,8 +952,8 @@ let schedView="timeline"; // "timeline" | "nightly"
 let gymDay=new Date().getDay();
 let gymView="workout";
 let progView="overview"; // "overview" | "goal" | "gigs" | "savings"
-let weekView="stats"; // "stats" | "journal" | "focus"
-let nutrView="diary"; // "diary" | "weight" // "workout" | "prs"
+let weekView="stats"; // "stats" | "tracker" | "notes" | "focus"
+let nutrView="diary"; // "diary" | "weight"
 let pomoState={mode:"work",secs:S.pomo.workMin*60,running:false};
 let pomoTimer=null;
 let notifTimers=[];
@@ -907,7 +971,6 @@ function fmtTime(t){
 function fmtRange(s,e){
  if(!s)return"";
  const sf=fmtTime(s), ef=fmtTime(e);
- // shorten if same period
  const sparts=sf.split(" "), eparts=ef.split(" ");
  if(sparts[1]===eparts[1]) return sparts[0]+"–"+ef;
  return sf+"–"+ef;
@@ -946,7 +1009,7 @@ function render(){
  <div class="brand-line">
  <div>
  <div class="brand-name">Prodo</div>
- <div class="brand-sub">Personal OS <span id="cloud-badge" style="font-family:'JetBrains Mono',monospace;font-size:.85em;margin-left:6px"></span></div>
+ <div class="brand-sub">Personal OS</div>
  </div>
  <div class="header-date">
  <div class="date-day">${new Date().toLocaleDateString(undefined,{weekday:"short"})}</div>
@@ -988,7 +1051,6 @@ function renderSchedule(){
  const hit=earned>=S.target;
  const encourage=hit?"Target reached.":earned===0?"Let's get started.":"Keep going.";
  const viewingToday=selDay===dow;
- // If viewing today and there's a date-specific override, use it; else use weekly template
  const acts=(viewingToday && S.dayOverrides[t]) ? S.dayOverrides[t] : (S.activities[selDay]||[]);
  const bonus=S.bonus||[];
  const comp=S.completions[t]||[];
@@ -1017,7 +1079,6 @@ function renderSchedule(){
 
  <div class="action-btns">
  <button class="action-btn${S.notifEnabled?" on":""}" id="notif-btn">${S.notifEnabled?" Reminders on":" Reminders"}</button>
- <button class="action-btn" id="ics-btn">Export Calendar</button>
  </div>
 
  <div class="stitle">Daily goal</div>
@@ -1087,7 +1148,7 @@ function tRow(a,done,canCheck){
 
 function bRow(a,done){
  return`<div class="b-row">
- <button class="t-check${done?" done":""}" data-bonus="${a.id}">${done?"":""}</button>
+ <button class="t-check${done?" done":""}" data-bonus="${a.id}">${done?"✓":""}</button>
  <span class="t-name${done?" done":""}" style="flex:1">${esc(a.text)}</span>
  <span class="pts-chip">+${a.pts}pt</span>
  <button class="del-btn" data-del-bonus="${a.id}">×</button>
@@ -1095,15 +1156,8 @@ function bRow(a,done){
 }
 
 // ─── GYM TAB ────────────────────────────────────────────────────────────────
-const GYM_DAYS=[1,2,3,4,5,6,0]; // Mon-Fri + optional Sat/Sun
+const GYM_DAYS=[1,2,3,4,5,6,0];
 const GYM_DAY_NAMES={1:"Mon",2:"Tue",3:"Wed",4:"Thu",5:"Fri",6:"Sat",0:"Sun"};
-const MUSCLES={
- 1:["Biceps","Triceps"],
- 3:["Quads","Hamstrings","Calves"],
- 5:["Chest","Abs","Back"],
- 6:["Legs","Chest","Back","Shoulders","Biceps"],
- 0:["Legs","Chest","Back","Shoulders","Biceps"]
-};
 
 function gymTodayLog(){
  const t=today();
@@ -1118,7 +1172,7 @@ function gymStreak(){
  for(let i=0;i<60;i++){
  const k=cur.getFullYear()+"-"+p2(cur.getMonth()+1)+"-"+p2(cur.getDate());
  if(att.includes(k)) streak++;
- else if(i>0) break; // allow today to be zero
+ else if(i>0) break;
  cur.setDate(cur.getDate()-1);
  }
  return streak;
@@ -1127,7 +1181,6 @@ function gymStreak(){
 function renderAttendanceCalendar(){
  const now=new Date(), t=today();
  const att=S.gym.attendance||[];
- // show last 28 days (4 weeks)
  const days=[];
  for(let i=27;i>=0;i--){
  const d=new Date(now); d.setDate(now.getDate()-i);
@@ -1176,14 +1229,12 @@ function renderGym(){
  const t=today();
  const wentToday=S.gym.attendance.includes(t);
 
- // group exercises by muscle
  const groups={};
  (routine?.exercises||[]).forEach(ex=>{
  if(!groups[ex.muscle]) groups[ex.muscle]=[];
  groups[ex.muscle].push(ex);
  });
 
- // count done exercises (all sets checked = exercise done)
  let totalEx=0, doneEx=0;
  (routine?.exercises||[]).forEach(ex=>{
  totalEx++;
@@ -1202,11 +1253,11 @@ function renderGym(){
  <div class="gym-hero">
  <div class="gym-hero-title">${routine?.name||"Rest day "}</div>
  <div class="gym-hero-sub">${isToday&&totalEx>0?`${doneEx}/${totalEx} exercises done`:DAYS[gymDay]+"'s routine"}</div>
- ${isToday&&totalEx>0?`<div class="bar-wrap" style="margin-top:10px"><div class="bar-fill" style="background:linear-gradient(90deg,var(--sage),#7ab885);width:${pct}%"></div></div>`:""}
+ ${isToday&&totalEx>0?`<div class="bar-wrap" style="margin-top:10px"><div class="bar-fill green" style="width:${pct}%"></div></div>`:""}
  </div>
 
  <div class="gym-day-pills">
- ${GYM_DAYS.map(d=>`<button class="gym-pill${gymDay===d?" active":""}" data-gday="${d}">${GYM_DAY_NAMES[d]}${d===todayDow()?" ":""}</button>`).join("")}
+ ${GYM_DAYS.map(d=>`<button class="gym-pill${gymDay===d?" active":""}" data-gday="${d}">${GYM_DAY_NAMES[d]}${d===todayDow()?" ✦":""}</button>`).join("")}
  </div>
 
  ${!routine?`<div class="empty-msg">No workout planned for this day</div>`:`
@@ -1239,7 +1290,7 @@ function renderGym(){
  }).join("")}
  </div>`).join("")}
 
- <div class="stitle" style="color:var(--sage)">Add exercise</div>
+ <div class="stitle">Add exercise</div>
  <div class="ex-add-row" id="ex-add-row">
  <input type="text" id="ex-name" placeholder="Exercise name"/>
  <select id="ex-muscle">
@@ -1250,14 +1301,9 @@ function renderGym(){
  <button class="gym-add-btn" id="ex-add-btn">+</button>
  </div>
 
- ${isToday?`<button class="complete-btn" id="gym-complete-btn">${wentToday?" Workout Logged":" Log Workout"}</button>`:""}
+ ${isToday?`<button class="complete-btn" id="gym-complete-btn">${wentToday?" Workout Logged ✓":" Log Workout"}</button>`:""}
  `}
  `;
-}
-
-function muscleEmoji(m){
- const map={Biceps:"",Triceps:"",Chest:"",Back:"",Shoulders:"",Abs:"",Quads:"",Hamstrings:"",Calves:"",Legs:""};
- return map[m]||"";
 }
 
 function renderAttendPage(){
@@ -1299,11 +1345,8 @@ function renderPRs(){
 }
 
 function attachGymHandlers(){
- // view toggle
  document.querySelectorAll("[data-gview]").forEach(el=>el.onclick=()=>{gymView=el.dataset.gview;renderContent();});
- // day pills
  document.querySelectorAll("[data-gday]").forEach(el=>el.onclick=()=>{gymDay=+el.dataset.gday;renderContent();});
- // set reps edit
  document.querySelectorAll("[data-set-ex]").forEach(el=>el.oninput=()=>{
  const exId=el.dataset.setEx, i=+el.dataset.setI, val=+el.value||1;
  const log=gymTodayLog();
@@ -1314,7 +1357,6 @@ function attachGymHandlers(){
  log[exId][i].reps=val;
  save();
  });
- // exercise level checkmark (marks all sets done/undone)
  document.querySelectorAll("[data-ex-check]").forEach(el=>el.onclick=()=>{
  const exId=el.dataset.exCheck;
  const log=gymTodayLog();
@@ -1326,7 +1368,6 @@ function attachGymHandlers(){
  log[exId].forEach(s=>s.done=!allDone);
  save(); renderContent();
  });
- // set done toggle
  document.querySelectorAll("[data-done-ex]").forEach(el=>el.onclick=()=>{
  const exId=el.dataset.doneEx, i=+el.dataset.doneI;
  const log=gymTodayLog();
@@ -1337,13 +1378,11 @@ function attachGymHandlers(){
  log[exId][i].done=!log[exId][i].done;
  save(); renderContent();
  });
- // delete exercise
  document.querySelectorAll("[data-del-ex]").forEach(el=>el.onclick=()=>{
  const d=+el.dataset.delExDay;
  if(S.gym.routines[d]) S.gym.routines[d].exercises=S.gym.routines[d].exercises.filter(e=>e.id!==el.dataset.delEx);
  save(); renderContent();
  });
- // add exercise
  const addBtn=document.getElementById("ex-add-btn");
  if(addBtn) addBtn.onclick=()=>{
  const name=document.getElementById("ex-name").value.trim();
@@ -1356,13 +1395,11 @@ function attachGymHandlers(){
  S.gym.routines[gymDay].exercises.push(newEx);
  save(); renderContent();
  };
- // complete workout
  const completeBtn=document.getElementById("gym-complete-btn");
  if(completeBtn) completeBtn.onclick=()=>{
  const log=gymTodayLog();
  const routine=S.gym.routines[gymDay];
  if(!routine)return;
- // save PRs
  routine.exercises.forEach(ex=>{
  const logSets=log[ex.id]||ex.sets;
  const maxReps=Math.max(...logSets.filter(s=>s.done).map(s=>s.reps),0);
@@ -1371,14 +1408,12 @@ function attachGymHandlers(){
  if(!cur||maxReps>=cur.reps) S.gym.prs[ex.id]={name:ex.name,reps:maxReps,date:today()};
  }
  });
- // log attendance
  const t=today();
  if(!S.gym.attendance.includes(t)) S.gym.attendance.push(t);
  save();
  renderContent();
  };
 }
-
 
 // ─── NUTRITION TAB ──────────────────────────────────────────────────────────
 function nutrLog(){ const t=today(); if(!S.nutrition.log[t]) S.nutrition.log[t]={}; return S.nutrition.log[t]; }
@@ -1405,7 +1440,6 @@ function renderNutrition(){
  const over=totalCals>calGoal;
  const protDone=totalProtein>=protGoal;
 
- // estimated carbs/fat from calories (rough split for bulking)
  const carbs=Math.round(totalCals*0.40/4);
  const fat=Math.round(totalCals*0.25/9);
 
@@ -1422,25 +1456,24 @@ function renderNutrition(){
  <div class="nutr-label">kcal today</div>
  </div>
  <div style="text-align:right">
- <div class="nutr-goal-txt" style="color:${over?"#e87c7c":"#E8A87C"}">${over?" +"+Math.abs(calGoal-totalCals)+" over":" "+(calGoal-totalCals)+" to go"}</div>
- <div style="font-size:.75rem;color:var(--dim);font-weight:600;margin-top:4px">Goal: ${calGoal} kcal</div>
+ <div class="nutr-goal-txt" style="color:${over?"var(--burgundy)":"var(--gold)"}">${over?"+"+Math.abs(calGoal-totalCals)+" over":(calGoal-totalCals)+" to go"}</div>
+ <div style="font-size:.75rem;color:var(--faint);font-weight:600;margin-top:4px">Goal: ${calGoal} kcal</div>
  </div>
  </div>
  <div class="nutr-bar" style="margin-bottom:4px"><div class="nutr-bar-fill${over?" over":""}" style="width:${calPct}%"></div></div>
- <div style="font-size:.7rem;color:var(--dim);font-weight:600;margin-bottom:14px">${calPct}% of calorie goal</div>
+ <div style="font-size:.7rem;color:var(--faint);font-weight:600;margin-bottom:14px">${calPct}% of calorie goal</div>
 
- <!-- Protein goal bar -->
  <div style="display:flex;justify-content:space-between;font-size:.75rem;font-weight:700;margin-bottom:5px">
- <span style="color:${protDone?"var(--sage)":"#E8A87C"}">Protein${protDone?" goal hit! ":""}</span>
- <span style="color:${protDone?"var(--sage)":"var(--dim)"}">${totalProtein}g / ${protGoal}g</span>
+ <span style="color:${protDone?"var(--green)":"var(--gold)"}">Protein${protDone?" goal hit! ":""}</span>
+ <span style="color:${protDone?"var(--green)":"var(--faint)"}">${totalProtein}g / ${protGoal}g</span>
  </div>
- <div class="nutr-bar" style="margin-bottom:4px;background:rgba(157,195,164,.15)">
- <div class="nutr-bar-fill" style="width:${protPct}%;background:linear-gradient(90deg,var(--sage),#7ab885)"></div>
+ <div class="nutr-bar" style="margin-bottom:4px;background:rgba(127,176,154,.15)">
+ <div class="nutr-bar-fill prot-bar-fill" style="width:${protPct}%"></div>
  </div>
- <div style="font-size:.7rem;color:var(--dim);font-weight:600;margin-bottom:14px">${protDone?" Great job hitting your protein!":"Log protein in each meal below"}</div>
+ <div style="font-size:.7rem;color:var(--faint);font-weight:600;margin-bottom:14px">${protDone?"Great job hitting your protein!":"Log protein in each meal below"}</div>
 
  <div class="nutr-macros">
- <div class="macro-chip"><div class="macro-val" style="color:var(--sage)">${totalProtein}g</div><div class="macro-lbl">Protein logged</div></div>
+ <div class="macro-chip"><div class="macro-val green">${totalProtein}g</div><div class="macro-lbl">Protein logged</div></div>
  <div class="macro-chip"><div class="macro-val">${carbs}g</div><div class="macro-lbl">Carbs est.</div></div>
  <div class="macro-chip"><div class="macro-val">${fat}g</div><div class="macro-lbl">Fat est.</div></div>
  </div>
@@ -1463,12 +1496,11 @@ function renderNutrition(){
  const items=log[meal]||[];
  const mealCals=items.reduce((s,f)=>s+(f.cals||0),0);
  const mealProt=items.reduce((s,f)=>s+(f.protein||0),0);
- const mealEmoji={Breakfast:"",Lunch:"",Dinner:"",Snacks:""}[meal]||"";
  return`<div class="meal-section">
  <div class="meal-header">
- <div class="meal-name">${mealEmoji} ${meal}</div>
+ <div class="meal-name">${meal}</div>
  <div style="display:flex;gap:8px;align-items:center">
- ${mealProt>0?`<span style="font-size:.72rem;font-weight:700;color:var(--sage)">${mealProt}g protein</span>`:""}
+ ${mealProt>0?`<span style="font-size:.72rem;font-weight:700;color:var(--green)">${mealProt}g protein</span>`:""}
  ${mealCals>0?`<div class="meal-cals">${mealCals} kcal</div>`:""}
  </div>
  </div>
@@ -1476,7 +1508,7 @@ function renderNutrition(){
  ${items.map(f=>`<div class="food-row">
  <span class="food-name">${esc(f.name)}</span>
  <div style="display:flex;gap:5px;align-items:center;flex-shrink:0">
- ${f.protein?`<span style="font-size:.7rem;font-weight:700;color:var(--sage);background:rgba(157,195,164,.12);border-radius:999px;padding:2px 8px">${f.protein}g</span>`:""}
+ ${f.protein?`<span style="font-size:.7rem;font-weight:700;color:var(--green);background:rgba(127,176,154,.12);border-radius:999px;padding:2px 8px">${f.protein}g</span>`:""}
  ${f.cals?`<span class="food-cal-badge">${f.cals}</span>`:""}
  </div>
  <button class="del-btn" data-del-food="${f.id}" data-del-meal="${meal}">×</button>
@@ -1487,11 +1519,11 @@ function renderNutrition(){
  <input type="number" class="food-prot-in" data-meal="${meal}" placeholder="g prot" min="0" style="width:68px"/>
  <button class="food-add-btn" data-add-meal="${meal}">+</button>
  </div>
- <button class="action-btn" data-browse-meal="${meal}" style="width:100%;margin-top:5px;border-color:rgba(255,122,80,0.25);color:var(--orange);background:var(--orange-g)">+ Browse food library</button>
+ <button class="action-btn" data-browse-meal="${meal}" style="width:100%;margin-top:5px;border-color:rgba(217,160,102,0.35);color:var(--orange);background:var(--orange-g)">+ Browse food library</button>
  </div>`;
  }).join("")}
 
- <button class="complete-btn" id="log-nutr-btn" style="border-color:var(--orange);background:var(--orange)" ${(S.nutrition.history||[]).some(h=>h.date===t)?'style="opacity:.6"':''}>
+ <button class="complete-btn" id="log-nutr-btn" ${(S.nutrition.history||[]).some(h=>h.date===t)?'style="opacity:.6"':''}>
  ${(S.nutrition.history||[]).some(h=>h.date===t)?"Meals logged for today ✓ — tap to update":"Log today's meals"}
  </button>
 
@@ -1523,7 +1555,7 @@ function renderWeightLog(){
  <div class="nutr-label">${logs.length?"latest weigh-in":"no weigh-ins yet"}</div>
  </div>
  <div style="text-align:right">
- ${logs.length>=2?`<div class="nutr-goal-txt" style="color:${logs[0].kg>=logs[1].kg?"var(--sage)":"#e87c7c"}">${logs[0].kg>logs[1].kg?" +":logs[0].kg===logs[1].kg?" ":" "}${Math.abs(logs[0].kg-logs[1].kg).toFixed(1)} kg</div><div style="font-size:.72rem;color:var(--dim);font-weight:600;margin-top:4px">since last weigh-in</div>`:""}
+ ${logs.length>=2?`<div class="nutr-goal-txt" style="color:${logs[0].kg>=logs[1].kg?"var(--green)":"var(--burgundy)"}">${logs[0].kg>logs[1].kg?"+":logs[0].kg===logs[1].kg?"":""}${Math.abs(logs[0].kg-logs[1].kg).toFixed(1)} kg</div><div style="font-size:.72rem;color:var(--faint);font-weight:600;margin-top:4px">since last weigh-in</div>`:""}
  </div>
  </div>
  </div>
@@ -1564,6 +1596,10 @@ function attachNutritionHandlers(){
  };
  const goalIn=document.getElementById("cal-goal-in");
  if(goalIn) goalIn.onchange=e=>{const v=+e.target.value;if(v>=500){S.nutrition.calGoal=v;save();renderContent();}};
+ const protGoalIn=document.getElementById("prot-goal-in");
+ if(protGoalIn) protGoalIn.onchange=e=>{const v=+e.target.value;if(v>=20){S.nutrition.proteinGoal=v;save();renderContent();}};
+ const bwIn=document.getElementById("bw-in");
+ if(bwIn) bwIn.onchange=e=>{const v=+e.target.value;if(v>=30){S.nutrition.bodyweightKg=v;S.nutrition.proteinGoal=Math.round(v*2);save();renderContent();}};
  document.querySelectorAll("[data-add-meal]").forEach(btn=>{
  btn.onclick=()=>{
  const meal=btn.dataset.addMeal;
@@ -1695,9 +1731,6 @@ function openQtyPicker(idx){
       closeFoodModal();
       renderContent();
     };
-    // keep focus stable on qty input
-    const qi=document.getElementById("qty-input");
-    if(qi&&document.activeElement!==qi){}
   }
   draw();
 }
@@ -1706,7 +1739,7 @@ function openQtyPicker(idx){
 function renderNightly(){
   const t=today(), dow=todayDow();
   const done=S.nightly.log[t]||[];
-  const isStrongDay=(dow===1||dow===3||dow===5); // Mon/Wed/Fri
+  const isStrongDay=(dow===1||dow===3||dow===5);
   const steps=S.nightly.steps.filter(s=>{
     if(s.dayType==="all") return true;
     if(s.dayType==="strong") return isStrongDay;
@@ -1785,7 +1818,7 @@ function attachNightlyHandlers(){
   if(logBtn) logBtn.onclick=()=>{
     const dow=todayDow();
     const isStrongDay=(dow===1||dow===3||dow===5);
-    const steps=S.nightly.steps.filter(s=>s.dayType==="all"||(s.dayType==="strong"&&isStrongDay)||(s.dayType==="serum"&&!isStrongDay));
+    const steps=S.nightly.steps.filter(s=>s.dayType==="all"||(s.dayType==="strong"&&isStrongDay)||(s.dayType==="serum"&&!isStrongDay)||(s.dayType==="sunday"&&dow===0));
     const total=steps.length+S.nightly.massages.length+S.nightly.exercises.length;
     const done=(S.nightly.log[t]||[]).length;
     if(!S.nightly.history) S.nightly.history=[];
@@ -1800,6 +1833,7 @@ function attachNightlyHandlers(){
 let wishCat="All";
 let wishFormOpen=false;
 let wishFormImg="";
+let wishCatFormOpen=false;
 
 function fmtMoney(n){
   return "$"+Number(n||0).toLocaleString("es-MX");
@@ -1822,6 +1856,13 @@ function renderWishlist(){
       ${cats.map(c=>`<button class="wish-cat-pill${wishCat===c?" active":""}" data-wcat="${esc(c)}">${esc(c)}</button>`).join("")}
       <button class="add-cat-btn" id="add-cat-btn">+ Category</button>
     </div>
+
+    ${wishCatFormOpen?`
+    <div class="add-row" id="wish-cat-form" style="margin-top:0;margin-bottom:14px">
+      <input type="text" id="wish-cat-name" placeholder="New category name..." autocomplete="off"/>
+      <button class="add-btn" id="wish-cat-save">+</button>
+      <button class="wish-cancel-btn" id="wish-cat-cancel" style="padding:0 14px">Cancel</button>
+    </div>`:""}
 
     ${wishFormOpen?`
     <div class="wish-form">
@@ -1863,10 +1904,21 @@ function attachWishlistHandlers(){
   const addCard=document.getElementById("wish-add-card");
   if(addCard) addCard.onclick=()=>{wishFormOpen=true;wishFormImg="";renderContent();};
   const addCatBtn=document.getElementById("add-cat-btn");
-  if(addCatBtn) addCatBtn.onclick=()=>{
-    const name=prompt("New category name:");
-    if(name&&name.trim()){S.wishlist.categories.push(name.trim());save();renderContent();}
+  if(addCatBtn) addCatBtn.onclick=()=>{wishCatFormOpen=true;renderContent();
+    const inp=document.getElementById("wish-cat-name"); if(inp) inp.focus();
   };
+  const catSave=document.getElementById("wish-cat-save");
+  const catInput=document.getElementById("wish-cat-name");
+  const saveCat=()=>{
+    const name=(catInput?.value||"").trim();
+    if(!name)return;
+    if(!S.wishlist.categories.includes(name)) S.wishlist.categories.push(name);
+    wishCatFormOpen=false; wishCat=name; save(); renderContent();
+  };
+  if(catSave) catSave.onclick=saveCat;
+  if(catInput) catInput.onkeydown=e=>{if(e.key==="Enter")saveCat();};
+  const catCancel=document.getElementById("wish-cat-cancel");
+  if(catCancel) catCancel.onclick=()=>{wishCatFormOpen=false;renderContent();};
   document.querySelectorAll("[data-wdel]").forEach(el=>el.onclick=()=>{
     S.wishlist.items=S.wishlist.items.filter(i=>i.id!==el.dataset.wdel);
     save();renderContent();
@@ -1936,7 +1988,6 @@ function renderProgress(){
   if(progView==="physique") return subnav+progPhotoPage("physique");
   if(progView==="face") return subnav+progPhotoPage("face");
 
-  // ── OVERVIEW ──
   const goalPct=activeGoal?Math.min(100,Math.round(activeGoal.saved/activeGoal.target*100)):0;
   return subnav+`
     <div class="money-stat-grid">
@@ -1945,7 +1996,7 @@ function renderProgress(){
     </div>
     <div class="money-stat-grid">
       <div class="money-stat"><div class="money-stat-val cyan">${m.gigs.length}</div><div class="money-stat-lbl">Gigs logged</div></div>
-      <div class="money-stat"><div class="money-stat-val" style="color:var(--text)">${m.goals.filter(g=>g.done).length}</div><div class="money-stat-lbl">Goals reached</div></div>
+      <div class="money-stat"><div class="money-stat-val" style="color:var(--ink)">${m.goals.filter(g=>g.done).length}</div><div class="money-stat-lbl">Goals reached</div></div>
     </div>
 
     <div class="stitle">Current goal</div>
@@ -2057,7 +2108,6 @@ function monthLabel(mk){
   return names[+m-1]+" "+y;
 }
 function progPhotoPage(kind){
-  // kind: "physique" (front/back/side) or "face" (front/side)
   const arr=kind==="physique"?S.physique:S.facePhotos;
   const slots=kind==="physique"?["front","back","side"]:["front","side"];
   const title=kind==="physique"?"Physique Progress":"Face Progress";
@@ -2124,7 +2174,6 @@ function attachPhotoHandlers(){
       const entry=arr.find(x=>x.month===mk);
       if(entry){
         delete entry[slot];
-        // if no photos left in the month, remove the entry
         const slots=kind==="physique"?["front","back","side"]:["front","side"];
         if(!slots.some(s=>entry[s])){
           const i=arr.indexOf(entry); arr.splice(i,1);
@@ -2137,11 +2186,9 @@ function attachPhotoHandlers(){
 
 function attachProgressHandlers(){
   const m=S.money;
-  // sub-nav
   document.querySelectorAll("[data-pview]").forEach(el=>el.onclick=()=>{progView=el.dataset.pview;renderContent();});
   if(progView==="physique"||progView==="face"){ attachPhotoHandlers(); return; }
   document.querySelectorAll("[data-goto]").forEach(el=>el.onclick=()=>{progView=el.dataset.goto;renderContent();});
-  // create goal
   const gc=document.getElementById("goal-create-btn");
   if(gc) gc.onclick=()=>{
     const name=document.getElementById("goal-name").value.trim();
@@ -2152,7 +2199,6 @@ function attachProgressHandlers(){
     m.activeGoalId=id;
     save();renderContent();
   };
-  // add money to goal
   document.querySelectorAll("[data-add-goal-money]").forEach(el=>el.onclick=()=>{
     const amt=+prompt("How much to add to this goal? (MXN)");
     if(!amt||amt<=0)return;
@@ -2163,7 +2209,6 @@ function attachProgressHandlers(){
     const g=m.goals.find(x=>x.id===el.dataset.completeGoal);
     if(g){g.done=true;m.activeGoalId=null;save();renderContent();}
   });
-  // add gig
   const ga=document.getElementById("gig-add-btn");
   if(ga) ga.onclick=()=>{
     const name=document.getElementById("gig-name").value.trim();
@@ -2175,7 +2220,6 @@ function attachProgressHandlers(){
   document.querySelectorAll("[data-gig-del]").forEach(el=>el.onclick=()=>{
     m.gigs=m.gigs.filter(g=>g.id!==el.dataset.gigDel);save();renderContent();
   });
-  // add savings
   const sa=document.getElementById("sav-add-btn");
   if(sa) sa.onclick=()=>{
     const name=document.getElementById("sav-name").value.trim()||"Savings";
@@ -2194,20 +2238,17 @@ function attachProgressHandlers(){
 }
 
 function renderTracker(){
- // Combine everything: schedule logs, gym attendance, nutrition history
  const schedLog=S.schedLog||[];
  const gymAtt=(S.gym&&S.gym.attendance)||[];
  const nutrHist=(S.nutrition&&S.nutrition.history)||[];
 
- // last 7 days keys
  const dayKeys=[];
  for(let i=6;i>=0;i--){
   const d=new Date(); d.setDate(d.getDate()-i);
-  dayKeys.push(d.toISOString().slice(0,10));
+  dayKeys.push(d.getFullYear()+"-"+p2(d.getMonth()+1)+"-"+p2(d.getDate()));
  }
  const dayShort=["Su","Mo","Tu","We","Th","Fr","Sa"];
 
- // ── numbers ──
  const t=today();
  const gymThisWeek=dayKeys.filter(k=>gymAtt.includes(k)).length;
  const mealsLogged7=nutrHist.filter(h=>dayKeys.includes(h.date)).length;
@@ -2223,10 +2264,8 @@ function renderTracker(){
   return Math.round(recent.reduce((s,h)=>s+(h.protein||0),0)/recent.length);
  })();
 
- // ── points per day chart (from schedLog) ──
  const ptsByDay=dayKeys.map(k=>{const e=schedLog.find(h=>h.date===k);return e?e.pts:0;});
  const maxPts=Math.max(S.target,...ptsByDay,1);
- // ── calories per day chart (from nutrition history) ──
  const calByDay=dayKeys.map(k=>{const e=nutrHist.find(h=>h.date===k);return e?e.cals:0;});
  const maxCal=Math.max(S.nutrition.calGoal,...calByDay,1);
 
@@ -2236,7 +2275,7 @@ function renderTracker(){
    ${vals.map((v,i)=>`
     <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%">
      <div style="width:100%;background:${color};border-radius:2px 2px 0 0;height:${Math.max(2,Math.round(v/max*94))}px;opacity:${v?1:.25}"></div>
-     <div style="font-family:'EB Garamond',serif;font-size:.56rem;color:var(--faint);margin-top:4px">${dayShort[new Date(dayKeys[i]).getDay()]}</div>
+     <div style="font-family:'EB Garamond',serif;font-size:.56rem;color:var(--faint);margin-top:4px">${dayShort[new Date(dayKeys[i]+"T12:00:00").getDay()]}</div>
     </div>`).join("")}
   </div>`;
 
@@ -2281,11 +2320,11 @@ function renderWeek(){
  <div class="gym-tab-btns">
  <button class="gym-tab-btn${weekView==="stats"?" active":""}" data-weekview="stats">Stats</button>
  <button class="gym-tab-btn${weekView==="tracker"?" active":""}" data-weekview="tracker">Tracker</button>
- <button class="gym-tab-btn${weekView==="journal"?" active":""}" data-weekview="journal">Journal</button>
+ <button class="gym-tab-btn${weekView==="notes"?" active":""}" data-weekview="notes">Notes</button>
  <button class="gym-tab-btn${weekView==="focus"?" active":""}" data-weekview="focus">Focus</button>
  </div>`;
 
- if(weekView==="journal") return subnav+renderJournal();
+ if(weekView==="notes") return subnav+renderNotes();
  if(weekView==="focus") return subnav+renderFocus();
  if(weekView==="tracker") return subnav+renderTracker();
 
@@ -2296,8 +2335,9 @@ function renderWeek(){
  const isT=k===t;
  let pct=0;
  if(isT){
- const total=(S.activities[dow]||[]).length+(S.bonus||[]).length;
- const done=(S.activities[dow]||[]).filter(a=>(S.completions[t]||[]).includes(a.id)).length
+ const base=(S.dayOverrides&&S.dayOverrides[t])?S.dayOverrides[t]:(S.activities[dow]||[]);
+ const total=base.length+(S.bonus||[]).length;
+ const done=base.filter(a=>(S.completions[t]||[]).includes(a.id)).length
  +(S.bonus||[]).filter(a=>(S.completions[t]||[]).includes(a.id)).length;
  pct=total?Math.round((done/total)*100):0;
  } else {
@@ -2319,31 +2359,36 @@ function renderWeek(){
  </div>`).join("")}
  </div>
  ${[
- [" Longest streak",S.streak+" days"],
- [" Done today",(S.activities[dow]||[]).filter(a=>(S.completions[t]||[]).includes(a.id)).length+(S.bonus||[]).filter(a=>(S.completions[t]||[]).includes(a.id)).length],
- [" Daily goal",S.target+" pts"],
- ["⭐ Total wins logged",totalWins],
+ ["Streak",S.streak+" days"],
+ ["Done today",(S.activities[dow]||[]).filter(a=>(S.completions[t]||[]).includes(a.id)).length+(S.bonus||[]).filter(a=>(S.completions[t]||[]).includes(a.id)).length],
+ ["Daily goal",S.target+" pts"],
+ ["Total wins logged",totalWins],
  ].map(([l,v])=>`<div class="stat-card"><span>${l}</span><span class="stat-val">${v}</span></div>`).join("")}
  `;
 }
 
-// ─── JOURNAL TAB ─────────────────────────────────────────────────────────────
-function renderJournal(){
- const t=today();
- const text=S.journal[t]||"";
- const dateLabel=new Date().toLocaleDateString(undefined,{weekday:"long",month:"long",day:"numeric"});
- const prevKeys=Object.keys(S.journal).filter(k=>k!==t&&S.journal[k].trim()).sort().reverse().slice(0,5);
+// ─── NOTES (replaces Journal — like the Notes app, for things to remember) ────
+function renderNotes(){
+ const notes=(S.notes||[]).slice().reverse();
+ const activeCount=(S.notes||[]).filter(n=>!n.done).length;
  return`
- <div class="j-date"> ${dateLabel}</div>
- <textarea id="j-area" placeholder="How's today going? Jot down a win, a struggle, or anything on your mind ">${esc(text)}</textarea>
- <div class="saved" id="saved-note"> saved</div>
- ${prevKeys.length?`<div class="stitle">Recent entries</div>`:""}
- ${prevKeys.map(k=>{
- const d=new Date(k+"T12:00:00");
- const label=d.toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric"});
- const preview=S.journal[k].slice(0,100)+(S.journal[k].length>100?"…":"");
- return`<div class="j-prev"><div class="j-prev-date">${label}</div><div class="j-prev-text">${esc(preview)}</div></div>`;
- }).join("")}
+ <div class="j-date">Notes${activeCount?` · ${activeCount} pending`:""}</div>
+ <div class="add-row" style="margin-top:0">
+ <input type="text" id="note-text" placeholder="New note... (e.g. buy protein, pay internet)"/>
+ <button class="add-btn" id="note-add">+</button>
+ </div>
+ ${notes.length===0?`<div class="empty-state" style="margin-top:12px">No notes yet — jot down anything you don't want to forget.</div>`:""}
+ <div style="margin-top:12px">
+ ${notes.map(n=>`
+ <div class="t-row note-row">
+ <button class="t-check${n.done?" done":""}" data-note-check="${n.id}">${n.done?"✓":""}</button>
+ <div style="flex:1">
+ <div class="t-name${n.done?" done":""}">${esc(n.text)}</div>
+ <div class="note-date">${n.date}</div>
+ </div>
+ <button class="del-btn" data-del-note="${n.id}">×</button>
+ </div>`).join("")}
+ </div>
  `;
 }
 
@@ -2383,33 +2428,25 @@ function renderFocus(){
 }
 
 // ─── HANDLERS ────────────────────────────────────────────────────────────────
-let jTimer=null;
-
 function attachHandlers(){
  if(tab==="gym"){ attachGymHandlers(); return; }
  if(tab==="nutrition"){ attachNutritionHandlers(); return; }
  if(tab==="wishlist"){ attachWishlistHandlers(); return; }
  if(tab==="progress"){ attachProgressHandlers(); if(progView==="wishlist") attachWishlistHandlers(); return; }
  if(tab==="schedule"){
- // sub-nav (Timeline / Nightly Routine)
  document.querySelectorAll("[data-schedview]").forEach(el=>el.onclick=()=>{schedView=el.dataset.schedview;renderContent();});
  if(schedView==="nightly"){ attachNightlyHandlers(); return; }
  const t=today(), dow=todayDow();
  const viewingToday=selDay===dow;
- // Ensures today has an editable override copy (so weekly template stays intact)
  function ensureTodayOverride(){
  if(!S.dayOverrides[t]){
  S.dayOverrides[t]=(S.activities[dow]||[]).map(a=>({...a}));
  }
  return S.dayOverrides[t];
  }
- // day pills
  document.querySelectorAll("[data-day]").forEach(el=>el.onclick=()=>{selDay=+el.dataset.day;renderContent();});
- // check activity
  document.querySelectorAll("[data-act]").forEach(el=>el.onclick=()=>toggle(el.dataset.act));
- // check bonus
  document.querySelectorAll("[data-bonus]").forEach(el=>el.onclick=()=>toggle(el.dataset.bonus));
- // delete activity
  document.querySelectorAll("[data-del-act]").forEach(el=>el.onclick=()=>{
  if(viewingToday){
  const arr=ensureTodayOverride();
@@ -2420,12 +2457,10 @@ function attachHandlers(){
  }
  save(); renderContent();
  });
- // delete bonus
  document.querySelectorAll("[data-del-bonus]").forEach(el=>el.onclick=()=>{
  S.bonus=(S.bonus||[]).filter(a=>a.id!==el.dataset.delBonus);
  save(); renderContent();
  });
- // add activity
  document.getElementById("act-add").onclick=()=>{
  const text=document.getElementById("act-text").value.trim();
  const pts=+document.getElementById("act-pts").value||1;
@@ -2439,7 +2474,6 @@ function attachHandlers(){
  }
  save(); renderContent();
  };
- // add bonus
  document.getElementById("bonus-add").onclick=()=>{
  const text=document.getElementById("bonus-text").value.trim();
  const pts=+document.getElementById("bonus-pts").value||1;
@@ -2447,15 +2481,10 @@ function attachHandlers(){
  S.bonus.push({id:"b"+Date.now(),text,pts});
  save(); renderContent();
  };
- // target
  document.getElementById("target-in").onchange=e=>{
  const v=+e.target.value; if(v>0){S.target=v;save();renderContent();}
  };
- // notif btn
  document.getElementById("notif-btn").onclick=requestNotif;
- // ics btn
- document.getElementById("ics-btn").onclick=downloadICS;
- // log schedule btn
  const logSchedBtn=document.getElementById("log-sched-btn");
  if(logSchedBtn) logSchedBtn.onclick=()=>{
  const t2=today(), dow2=todayDow();
@@ -2468,22 +2497,34 @@ function attachHandlers(){
  if(!S.schedLog) S.schedLog=[];
  const ex=S.schedLog.find(h=>h.date===t2);
  if(ex){Object.assign(ex,entry);} else {S.schedLog.push(entry);}
+ // also update today's Stats snapshot so Week → Stats stays in sync
+ if(!S.dayHistory) S.dayHistory={};
+ S.dayHistory[t2]={done:doneItems.length,total:allToday.length};
  save(); renderContent();
  };
  }
 
  if(tab==="week"){
- // sub-nav
  document.querySelectorAll("[data-weekview]").forEach(el=>el.onclick=()=>{weekView=el.dataset.weekview;renderContent();});
- if(weekView==="journal"){
- const ta=document.getElementById("j-area");
- if(ta) ta.oninput=()=>{
- S.journal[today()]=ta.value; save();
- const note=document.getElementById("saved-note");
- if(note){note.classList.add("show");
- clearTimeout(jTimer);
- jTimer=setTimeout(()=>note.classList.remove("show"),1500);}
+ if(weekView==="notes"){
+ const addBtn=document.getElementById("note-add");
+ const input=document.getElementById("note-text");
+ const addNote=()=>{
+ const text=input.value.trim(); if(!text)return;
+ if(!S.notes) S.notes=[];
+ S.notes.push({id:"nt"+Date.now(),text,date:today(),done:false});
+ save(); renderContent();
  };
+ if(addBtn) addBtn.onclick=addNote;
+ if(input) input.onkeydown=e=>{if(e.key==="Enter")addNote();};
+ document.querySelectorAll("[data-note-check]").forEach(el=>el.onclick=()=>{
+ const n=(S.notes||[]).find(x=>x.id===el.dataset.noteCheck);
+ if(n){n.done=!n.done;save();renderContent();}
+ });
+ document.querySelectorAll("[data-del-note]").forEach(el=>el.onclick=()=>{
+ S.notes=(S.notes||[]).filter(x=>x.id!==el.dataset.delNote);
+ save(); renderContent();
+ });
  }
  if(weekView==="focus"){
  document.getElementById("pomo-toggle").onclick=togglePomo;
@@ -2591,39 +2632,8 @@ function downloadICS(){
 function esc(s){const d=document.createElement("div");d.textContent=s;return d.innerHTML;}
 
 // ─── INIT ────────────────────────────────────────────────────────────────────
-async function initApp(){
- // First, make the bin public (fixes 401 on private bins from the browser)
- await cloudMakePublic();
- // Then load the latest state from the cloud
- const cloudState=await cloudPull();
- if(cloudState){
-  S=cloudState;
-  // re-run the same migrations so cloud data gets any new fields
-  if(!S.bonus) S.bonus=defaultData().bonus;
-  if(!S.pomo) S.pomo=defaultData().pomo;
-  if(!S.completions) S.completions={};
-  if(!S.journal) S.journal={};
-  if(!S.dayHistory) S.dayHistory={};
-  if(S.streak===undefined) S.streak=0;
-  if(!S.gym) S.gym=defaultData().gym;
-  if(!S.dayOverrides) S.dayOverrides={};
-  if(!S.schedLog) S.schedLog=[];
-  if(!S.gym.gymLog) S.gym.gymLog={};
-  if(!S.gym.prs) S.gym.prs={};
-  if(!S.gym.attendance) S.gym.attendance=[];
-  if(!S.nutrition) S.nutrition=defaultData().nutrition;
-  if(!S.nutrition.weightLog) S.nutrition.weightLog=[];
-  if(!S.wishlist) S.wishlist=defaultData().wishlist;
-  if(!S.money) S.money=defaultData().money;
-  if(!S.nightly) S.nightly=defaultData().nightly;
-  if(!S.nightly.history) S.nightly.history=[];
-  localStorage.setItem(KEY,JSON.stringify(S));
- }
- render();
- updateCloudBadge();
- if(S.notifEnabled&&"Notification"in window&&Notification.permission==="granted") scheduleNotifs();
-}
-initApp();
+render();
+if(S.notifEnabled&&"Notification"in window&&Notification.permission==="granted") scheduleNotifs();
 setInterval(()=>{if(tab==="schedule")renderContent();},60000);
 </script>
 </body>
