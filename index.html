@@ -609,6 +609,8 @@ function defaultData() {
  steps:[
  {id:"n1",name:"Cleanse face",note:"Wash away the day's dirt & oil with a gentle cleanser",dayType:"all"},
  {id:"n9",name:"Shave",note:"Sunday only — shave after cleansing on clean, soft skin",dayType:"sunday"},
+ {id:"n11",name:"Light therapy mask",note:"Every day — clean, dry face. Relax 10 min under the LED mask before anything else goes on",dayType:"all"},
+ {id:"n12",name:"Clay mask",note:"Thu · Sun only — 10 min to draw out oil & unclog pores, then rinse. Skip on strong-cream nights",dayType:"clay"},
  {id:"n10",name:"Ice roller",note:"On clean skin, roll upward & outward 1-2 min. De-puffs & preps skin to absorb products",dayType:"all"},
  {id:"n2",name:"Face mask",note:"2-3x a week is plenty — clay for oil, sheet for hydration",dayType:"all"},
  {id:"n4",name:"Strong cream (retinol/actives)",note:"Mon · Wed · Fri only — never stack with acids same night",dayType:"strong"},
@@ -795,13 +797,13 @@ if(!S.physique) S.physique=[];
 if(!S.facePhotos) S.facePhotos=[];
 if(!S.nightly) S.nightly=defaultData().nightly;
 // refresh nightly steps/massages/exercises to latest (keeps log + history)
-if(S._nightlyVer!==5){
+if(S._nightlyVer!==6){
  const dn=defaultData().nightly;
  S.nightly.steps=dn.steps;
  S.nightly.massages=dn.massages;
  S.nightly.exercises=dn.exercises;
  if(!S.nightly.history) S.nightly.history=[];
- S._nightlyVer=5;
+ S._nightlyVer=6;
  save();
 }
 if(!S.nutrition.weightLog) S.nutrition.weightLog=[];
@@ -840,7 +842,7 @@ if(!S._restoredJul8){
   if(!S.nightly.history.find(h=>h.date===d)){
    const dow=new Date(d+"T12:00:00").getDay();
    const isStrong=(dow===1||dow===3||dow===5);
-   const steps=S.nightly.steps.filter(s=>s.dayType==="all"||(s.dayType==="strong"&&isStrong)||(s.dayType==="serum"&&!isStrong)||(s.dayType==="sunday"&&dow===0));
+   const steps=S.nightly.steps.filter(s=>s.dayType==="all"||(s.dayType==="strong"&&isStrong)||(s.dayType==="serum"&&!isStrong)||(s.dayType==="sunday"&&dow===0)||(s.dayType==="clay"&&(dow===4||dow===0)));
    const total=steps.length+S.nightly.massages.length+S.nightly.exercises.length;
    S.nightly.history.push({date:d,done:total,total:total});
   }
@@ -896,7 +898,7 @@ if(!S._restoredJul9){
  // Nightly routine
  if(!S.nightly.history.find(h=>h.date===d)){
   const isStrong=(dow===1||dow===3||dow===5);
-  const steps=S.nightly.steps.filter(s=>s.dayType==="all"||(s.dayType==="strong"&&isStrong)||(s.dayType==="serum"&&!isStrong)||(s.dayType==="sunday"&&dow===0));
+  const steps=S.nightly.steps.filter(s=>s.dayType==="all"||(s.dayType==="strong"&&isStrong)||(s.dayType==="serum"&&!isStrong)||(s.dayType==="sunday"&&dow===0)||(s.dayType==="clay"&&(dow===4||dow===0)));
   const total=steps.length+S.nightly.massages.length+S.nightly.exercises.length;
   S.nightly.history.push({date:d,done:total,total});
  }
@@ -1745,6 +1747,7 @@ function renderNightly(){
     if(s.dayType==="strong") return isStrongDay;
     if(s.dayType==="serum") return !isStrongDay;
     if(s.dayType==="sunday") return dow===0;
+    if(s.dayType==="clay") return dow===4||dow===0;
     return true;
   });
   const massages=S.nightly.massages;
@@ -1818,7 +1821,7 @@ function attachNightlyHandlers(){
   if(logBtn) logBtn.onclick=()=>{
     const dow=todayDow();
     const isStrongDay=(dow===1||dow===3||dow===5);
-    const steps=S.nightly.steps.filter(s=>s.dayType==="all"||(s.dayType==="strong"&&isStrongDay)||(s.dayType==="serum"&&!isStrongDay)||(s.dayType==="sunday"&&dow===0));
+    const steps=S.nightly.steps.filter(s=>s.dayType==="all"||(s.dayType==="strong"&&isStrongDay)||(s.dayType==="serum"&&!isStrongDay)||(s.dayType==="sunday"&&dow===0)||(s.dayType==="clay"&&(dow===4||dow===0)));
     const total=steps.length+S.nightly.massages.length+S.nightly.exercises.length;
     const done=(S.nightly.log[t]||[]).length;
     if(!S.nightly.history) S.nightly.history=[];
