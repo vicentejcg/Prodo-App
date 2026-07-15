@@ -411,6 +411,37 @@ textarea{width:100%;min-height:180px;resize:vertical;border-radius:var(--r2);lin
 ::-webkit-scrollbar{width:5px}
 ::-webkit-scrollbar-track{background:var(--paper2)}
 ::-webkit-scrollbar-thumb{background:var(--line2);border-radius:0}
+
+/* ── EXERCISE ANIMATIONS ── */
+.demo-btn{flex-shrink:0;width:30px;height:30px;border-radius:50%;border:1px solid var(--line2);background:transparent;color:var(--gold);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;transition:all .18s;padding:0}
+.demo-btn:hover{border-color:var(--gold);background:var(--gold-g)}
+.anim-svg{display:block;width:100%;height:100%}
+.anim-fig{stroke:var(--gold);stroke-width:5;stroke-linecap:round;stroke-linejoin:round;fill:none}
+.anim-fig .joint{fill:var(--gold);stroke:none}
+.anim-mat{stroke:var(--line2);stroke-width:3}
+/* inline mini demo inside a routine row */
+.mini-demo{width:100%;height:120px;background:var(--paper2);border:1px solid var(--line);border-radius:var(--r);margin-top:8px;overflow:hidden}
+/* follow-along modal */
+.fa-modal{position:fixed;inset:0;z-index:1200;background:var(--paper);display:flex;flex-direction:column;padding:22px 18px calc(28px + env(safe-area-inset-bottom));animation:fadeIn .2s}
+.fa-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.fa-kicker{font-family:'Cormorant Garamond',serif;font-size:.66rem;font-weight:600;color:var(--muted);letter-spacing:.2em;text-transform:uppercase}
+.fa-close{background:none;border:none;color:var(--faint);font-size:28px;cursor:pointer;line-height:1}
+.fa-count{font-family:'EB Garamond',serif;font-style:italic;font-size:.8rem;color:var(--faint);text-align:center;margin-bottom:10px}
+.fa-stage{flex:1;display:flex;align-items:center;justify-content:center;background:var(--paper2);border:1px solid var(--line);border-radius:var(--r2);min-height:0;position:relative;overflow:hidden}
+.fa-stage svg{width:min(78vw,320px);height:min(78vw,320px)}
+.fa-name{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:600;color:var(--forest);text-align:center;margin:16px 0 4px;line-height:1.1}
+.fa-note{font-family:'EB Garamond',serif;font-style:italic;font-size:.95rem;color:var(--muted);text-align:center;line-height:1.5;margin-bottom:14px;padding:0 6px}
+.fa-progressbar{height:3px;background:var(--sand2);border-radius:2px;margin-bottom:16px;overflow:hidden}
+.fa-progressbar > div{height:100%;background:var(--gold);transition:width .3s}
+.fa-controls{display:flex;gap:8px;align-items:center}
+.fa-nav{flex:1;padding:15px;border-radius:var(--r);border:1px solid var(--line2);background:transparent;color:var(--ink);font-family:'Cormorant Garamond',serif;font-size:.9rem;font-weight:600;cursor:pointer;letter-spacing:.08em;text-transform:uppercase;transition:all .18s}
+.fa-nav:hover:not(:disabled){border-color:var(--forest);color:var(--forest)}
+.fa-nav:disabled{opacity:.3;cursor:default}
+.fa-nav.primary{border-color:var(--forest);background:var(--forest);color:var(--paper);flex:1.4}
+.fa-nav.primary:hover{background:var(--forest2)}
+.fa-timer{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:600;color:var(--gold);text-align:center;margin-bottom:8px;letter-spacing:.04em}
+.fa-start-btn{width:100%;padding:12px;border-radius:var(--r);border:1px solid var(--gold);background:var(--gold-g);color:var(--forest);font-family:'Cormorant Garamond',serif;font-size:.82rem;font-weight:600;cursor:pointer;margin-top:10px;letter-spacing:.12em;text-transform:uppercase;transition:all .2s}
+.fa-start-btn:hover{background:var(--gold);color:var(--paper)}
 </style>
 </head>
 <body>
@@ -419,6 +450,7 @@ textarea{width:100%;min-height:180px;resize:vertical;border-radius:var(--r2);lin
 <div class="hud-ticks"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
 <div class="app" id="root"></div>
 <div id="food-modal-root"></div>
+<div id="fa-modal-root"></div>
 <script>
 // ─── DATA ────────────────────────────────────────────────────────────────────
 const DAYS = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
@@ -493,30 +525,29 @@ function defaultData() {
  activities: {
  0:[
  {id:"su_wake",text:"Wake up (9:00 AM)",pts:2},
- {id:"su1",text:"Skincare + brush teeth",pts:1},
+ {id:"su1",text:"Morning routine",pts:4},
  {id:"su2",text:"Healthy breakfast",pts:3},
  {id:"su3",text:"Going out",pts:8},
  {id:"su4",text:"Healthy dinner",pts:2},
- {id:"su5",text:"Skincare + face massage",pts:3},
+ {id:"su5",text:"Night routine",pts:3},
  {id:"su6",text:"Weekly review + plan next week",pts:3}
  ],
  1:[
  {id:"mo_wake",text:"Wake up (9:00 AM)",pts:2},
- {id:"mo1",text:"Skincare + brush teeth",pts:1},
+ {id:"mo1",text:"Morning routine",pts:4},
  {id:"mo2",text:"Take sun on balcony",pts:2},
  {id:"mo3",text:"Healthy breakfast",pts:3},
  {id:"mo4",text:"Walk",pts:3},
  {id:"mo5",text:"Gym",pts:5},
- {id:"mo5b",text:"Sauna",pts:2},
  {id:"mo6",text:"Work on business",pts:3},
  {id:"mo7",text:"Evening wind-down",pts:1},
  {id:"mo8",text:"Healthy dinner",pts:2},
- {id:"mo9",text:"Skincare + face massage",pts:3},
+ {id:"mo9",text:"Night routine",pts:3},
  {id:"mo10",text:"Get ready for bed",pts:1}
  ],
  2:[
  {id:"tu_wake",text:"Wake up (9:00 AM)",pts:2},
- {id:"tu1",text:"Skincare + brush teeth",pts:1},
+ {id:"tu1",text:"Morning routine",pts:4},
  {id:"tu2",text:"Take sun on balcony",pts:2},
  {id:"tu3",text:"Healthy breakfast",pts:3},
  {id:"tu4",text:"Walk",pts:3},
@@ -524,26 +555,25 @@ function defaultData() {
  {id:"tu6",text:"Work on business",pts:3},
  {id:"tu7",text:"Evening wind-down",pts:1},
  {id:"tu8",text:"Healthy dinner",pts:2},
- {id:"tu9",text:"Skincare + face massage",pts:3},
+ {id:"tu9",text:"Night routine",pts:3},
  {id:"tu10",text:"Get ready for bed",pts:1}
  ],
  3:[
  {id:"we_wake",text:"Wake up (9:00 AM)",pts:2},
- {id:"we1",text:"Skincare + brush teeth",pts:1},
+ {id:"we1",text:"Morning routine",pts:4},
  {id:"we2",text:"Take sun on balcony",pts:2},
  {id:"we3",text:"Healthy breakfast",pts:3},
  {id:"we4",text:"Walk",pts:3},
  {id:"we5",text:"Gym",pts:5},
- {id:"we5b",text:"Sauna",pts:2},
  {id:"we6",text:"Work on business",pts:3},
  {id:"we7",text:"Evening wind-down",pts:1},
  {id:"we8",text:"Healthy dinner",pts:2},
- {id:"we9",text:"Skincare + face massage",pts:3},
+ {id:"we9",text:"Night routine",pts:3},
  {id:"we10",text:"Get ready for bed",pts:1}
  ],
  4:[
  {id:"th_wake",text:"Wake up (9:00 AM)",pts:2},
- {id:"th1",text:"Skincare + brush teeth",pts:1},
+ {id:"th1",text:"Morning routine",pts:4},
  {id:"th2",text:"Take sun on balcony",pts:2},
  {id:"th3",text:"Healthy breakfast",pts:3},
  {id:"th4",text:"Walk",pts:3},
@@ -551,30 +581,29 @@ function defaultData() {
  {id:"th6",text:"Work on business",pts:3},
  {id:"th7",text:"Evening wind-down",pts:1},
  {id:"th8",text:"Healthy dinner",pts:2},
- {id:"th9",text:"Skincare + face massage",pts:3},
+ {id:"th9",text:"Night routine",pts:3},
  {id:"th10",text:"Get ready for bed",pts:1}
  ],
  5:[
  {id:"fr_wake",text:"Wake up (9:00 AM)",pts:2},
- {id:"fr1",text:"Skincare + brush teeth",pts:1},
+ {id:"fr1",text:"Morning routine",pts:4},
  {id:"fr2",text:"Take sun on balcony",pts:2},
  {id:"fr3",text:"Healthy breakfast",pts:3},
  {id:"fr4",text:"Walk",pts:3},
  {id:"fr5",text:"Gym",pts:5},
- {id:"fr5b",text:"Sauna",pts:2},
  {id:"fr6",text:"Work on business",pts:3},
  {id:"fr7",text:"Evening wind-down",pts:1},
  {id:"fr8",text:"Healthy dinner",pts:2},
- {id:"fr9",text:"Skincare + face massage",pts:3},
+ {id:"fr9",text:"Night routine",pts:3},
  {id:"fr10",text:"Get ready for bed",pts:1}
  ],
  6:[
  {id:"sa_wake",text:"Wake up (9:00 AM)",pts:2},
- {id:"sa1",text:"Skincare + brush teeth",pts:1},
+ {id:"sa1",text:"Morning routine",pts:4},
  {id:"sa2",text:"Healthy breakfast",pts:3},
  {id:"sa3",text:"Going out",pts:8},
  {id:"sa4",text:"Healthy dinner",pts:2},
- {id:"sa5",text:"Skincare + face massage",pts:3},
+ {id:"sa5",text:"Night routine",pts:3},
  {id:"sa6",text:"Plan the week ahead",pts:2}
  ]
  },
@@ -631,6 +660,41 @@ function defaultData() {
  {id:"e3",name:"Chin-up / jaw jut",note:"Push lower jaw forward, lift lower lip. Hold 10s. x15"},
  {id:"e4",name:"Vowel O-E",note:"Exaggerate 'O' then 'E' to work mouth & cheeks. 3 sets x 15"},
  {id:"e6",name:"Collarbone chin-in",note:"Head level, glide head back over shoulders to feel neck contract. 3 sets x 10"}
+ ],
+ log:{},
+ history:[]
+ },
+ morning:{
+ // Wake up + dynamic stretches (safe warm-up for a lean 16yo)
+ stretches:[
+ {id:"ms1",name:"Neck rolls",note:"Slowly drop chin to chest, roll head in gentle circles. 5x each way. Releases sleep tension"},
+ {id:"ms2",name:"Cat-Cow",note:"On hands & knees, arch then round your spine slowly. 8-10 slow reps. Wakes up the spine & core"},
+ {id:"ms3",name:"Standing side reach",note:"Feet hip-width, hands clasped overhead, lean side to side. 8x each side. Opens the ribs & waist"},
+ {id:"ms4",name:"Arm circles + cross-body swing",note:"Big slow arm circles 10x each way, then swing arms across chest. Warms shoulders — key before push exercises"},
+ {id:"ms5",name:"World's greatest stretch",note:"Lunge forward, hand down, rotate top arm to ceiling. 5x each side. Full-body dynamic opener"},
+ {id:"ms6",name:"Leg swings",note:"Hold a wall, swing each leg front-to-back 10x, then side-to-side 10x. Loosens hips & hamstrings"}
+ ],
+ // Bodyweight strength — chest / arms / abs. AAP + NSCA confirmed safe & growth-friendly for teens
+ exercises:[
+ {id:"me1",name:"Push-ups",note:"Chest + triceps. Body straight, chest to floor. 3 sets x 8-12. Drop to knees if needed — form over numbers"},
+ {id:"me2",name:"Incline push-ups (hands on desk/bed)",note:"Easier chest builder to start. 3 sets x 12. Progress to floor push-ups over time"},
+ {id:"me3",name:"Pike push-ups",note:"Hips up in an A-shape, lower head toward floor. Shoulders + triceps. 3 sets x 6-10"},
+ {id:"me4",name:"Chair/bench dips",note:"Hands on edge, lower & press up. Triceps. 3 sets x 8-12. Keep shoulders down, don't go too deep if it pinches"},
+ {id:"me5",name:"V-ups",note:"ABS. Lie flat on your back, arms overhead. In one move, lift your straight legs AND your upper body at the same time so your hands reach toward your feet — your body makes a 'V'. Slowly lower back down. 3 sets x 8-12. Go slow, don't jerk your neck"},
+ {id:"me8",name:"Crunches",note:"ABS (upper). Lie on your back, knees bent, feet flat, hands lightly behind your head. Curl just your shoulders off the floor (chin toward chest), squeeze your abs, then lower slow. Keep your LOWER back on the floor. 3 sets x 12-15. Don't pull your neck"},
+ {id:"me9",name:"Bicycle crunches",note:"ABS + obliques (sides). On your back, knees up at 90°, hands behind head. Bring one knee in while you twist the opposite elbow toward it — extend the other leg out. Then switch, like pedaling a bike. Slow & controlled, back flat. 3 sets x 10-12 each side"},
+ {id:"me6",name:"Plank",note:"ABS + whole core (hold, no movement). Forearms on the floor, elbows under shoulders, body in ONE straight line from head to heels. Squeeze your abs and glutes tight — don't let hips sag or pop up. Hold 3 x 30-45 sec. Breathe normally"},
+ {id:"me7",name:"Leg raises",note:"ABS (lower). Lie flat on your back, legs straight, hands under your lower back for support. Lift both straight legs up to 90° (pointing at ceiling), then lower them slow WITHOUT touching the floor. Keep lower back pressed down. 3 sets x 10-12"},
+ {id:"me10",name:"Mountain climbers",note:"ABS + cardio. Start in a push-up position (arms straight, hands under shoulders, body flat). Drive one knee toward your chest, then quickly switch legs — like running in place. Keep hips low & core tight. 3 sets x 30 sec"}
+ ],
+ // Skincare — Vicente's exact morning order
+ skincare:[
+ {id:"msk1",name:"Cleanse face",note:"Gentle cleanser to wash off the night's oil & sweat"},
+ {id:"msk2",name:"Ice roller",note:"Roll upward & outward 1-2 min. De-puffs & wakes up the skin"},
+ {id:"msk3",name:"Vitamin C serum",note:"A few drops, pat in. Brightens & protects from daytime damage — always AM"},
+ {id:"msk4",name:"Eye bag cream",note:"Gently pat around the eye, don't rub"},
+ {id:"msk5",name:"Moisturizing cream",note:"Lock in hydration for the whole day"},
+ {id:"msk6",name:"Sunscreen (SPF)",note:"LAST step, every single day — the #1 thing for clear, young-looking skin. Reapply if out in the sun"}
  ],
  log:{},
  history:[]
@@ -768,7 +832,7 @@ if(!S.gym) S.gym=defaultData().gym;
 if(!S.dayOverrides) S.dayOverrides={};
 if(!S.schedLog) S.schedLog=[];
 // ── v6 migration: schedule without fixed times (keeps logs, journal, food, progress) ──
-if(S._structVer!==6 && S._structVer!==7){
+if(S._structVer!==6 && S._structVer!==7 && S._structVer!==8){
  const def=defaultData();
  S.activities=def.activities;
  S.gym.routines=def.gym.routines;
@@ -776,7 +840,7 @@ if(S._structVer!==6 && S._structVer!==7){
  save();
 }
 // ── v7 migration: remove all "Drink water" tasks (free points) everywhere ──
-if(S._structVer!==7){
+if(S._structVer!==7 && S._structVer!==8){
  Object.keys(S.activities||{}).forEach(d=>{
   S.activities[d]=(S.activities[d]||[]).filter(a=>!/drink water/i.test(a.text||""));
  });
@@ -784,6 +848,19 @@ if(S._structVer!==7){
   S.dayOverrides[k]=(S.dayOverrides[k]||[]).filter(a=>!/drink water/i.test(a.text||""));
  });
  S._structVer=7;
+ save();
+}
+// ── v8 migration: rename skincare→routines, morning 4pts / night 3pts, remove Sauna ──
+if(S._structVer!==8){
+ const fixList=(arr)=>(arr||[]).filter(a=>!/^sauna$/i.test((a.text||"").trim())).map(a=>{
+  const txt=(a.text||"").trim();
+  if(/^skincare \+ brush teeth$/i.test(txt)){ a.text="Morning routine"; a.pts=4; }
+  else if(/^skincare \+ face massage$/i.test(txt)){ a.text="Night routine"; a.pts=3; }
+  return a;
+ });
+ Object.keys(S.activities||{}).forEach(d=>{ S.activities[d]=fixList(S.activities[d]); });
+ Object.keys(S.dayOverrides||{}).forEach(k=>{ S.dayOverrides[k]=fixList(S.dayOverrides[k]); });
+ S._structVer=8;
  save();
 }
 if(!S.gym.gymLog) S.gym.gymLog={};
@@ -803,6 +880,18 @@ if(S._nightlyVer!==7){
  S.nightly.exercises=dn.exercises;
  if(!S.nightly.history) S.nightly.history=[];
  S._nightlyVer=7;
+ save();
+}
+// ── Morning routine (new) — additive, keeps log + history ──
+if(!S.morning) S.morning=defaultData().morning;
+if(S._morningVer!==2){
+ const dm=defaultData().morning;
+ S.morning.stretches=dm.stretches;
+ S.morning.exercises=dm.exercises;
+ S.morning.skincare=dm.skincare;
+ if(!S.morning.log) S.morning.log={};
+ if(!S.morning.history) S.morning.history=[];
+ S._morningVer=2;
  save();
 }
 if(!S.nutrition.weightLog) S.nutrition.weightLog=[];
@@ -946,6 +1035,47 @@ if(!S._restoredJul12){
  logNightly(today());
 
  S._restoredJul12=true;
+ save();
+}
+
+// ── One-time: log Tuesday Jul 14 — gym workout + schedule (forgot to log it) ──
+if(!S._restoredJul14){
+ const d="2026-07-14";
+ const dow=new Date(d+"T12:00:00").getDay(); // 2 = Tuesday
+ // ── Gym: attendance + mark that day's routine sets done + save PRs ──
+ if(!S.gym.attendance.includes(d)) S.gym.attendance.push(d);
+ const routine=S.gym.routines[dow];
+ if(routine){
+  if(!S.gym.gymLog) S.gym.gymLog={};
+  if(!S.gym.gymLog[d]) S.gym.gymLog[d]={};
+  const gl=S.gym.gymLog[d];
+  routine.exercises.forEach(ex=>{
+   if(!gl[ex.id]) gl[ex.id]=ex.sets.map(s=>({...s}));
+   gl[ex.id].forEach(s=>s.done=true);
+   const maxReps=Math.max(...gl[ex.id].map(s=>s.reps),0);
+   if(maxReps>0){
+    const cur=S.gym.prs[ex.id];
+    if(!cur||maxReps>=cur.reps) S.gym.prs[ex.id]={name:ex.name,reps:maxReps,date:d};
+   }
+  });
+ }
+ // ── Schedule: full day (overwrite any partial auto-saved entry) ──
+ const acts=(S.dayOverrides&&S.dayOverrides[d])?S.dayOverrides[d]:(S.activities[dow]||[]);
+ const pts=acts.reduce((s,a)=>s+a.pts,0);
+ // mark every activity of that day as completed
+ if(!S.completions) S.completions={};
+ if(!S.completions[d]) S.completions[d]=[];
+ acts.forEach(a=>{ if(!S.completions[d].includes(a.id)) S.completions[d].push(a.id); });
+ if(!S.schedLog) S.schedLog=[];
+ const entry={date:d,done:acts.length,total:acts.length,pts,hit:pts>=S.target};
+ const ex=S.schedLog.find(h=>h.date===d);
+ if(ex) Object.assign(ex,entry); else S.schedLog.push(entry);
+ // ── Week → Stats ──
+ if(!S.dayHistory) S.dayHistory={};
+ if(acts.length) S.dayHistory[d]={done:acts.length,total:acts.length};
+ // keep the streak running through yesterday
+ if(pts>=S.target && S.streak<5){ S.streak=5; S.lastStreakDate=d; }
+ S._restoredJul14=true;
  save();
 }
 
@@ -1097,9 +1227,11 @@ function renderSchedule(){
  const subnav=`
  <div class="gym-tab-btns">
  <button class="gym-tab-btn${schedView==="timeline"?" active":""}" data-schedview="timeline">Timeline</button>
+ <button class="gym-tab-btn${schedView==="morning"?" active":""}" data-schedview="morning">Morning Routine</button>
  <button class="gym-tab-btn${schedView==="nightly"?" active":""}" data-schedview="nightly">Nightly Routine</button>
  </div>`;
 
+ if(schedView==="morning") return subnav+renderMorning();
  if(schedView==="nightly") return subnav+renderNightly();
 
  return subnav+`
@@ -1795,13 +1927,14 @@ function renderNightly(){
   const pct=totalItems?Math.round(doneCount/totalItems*100):0;
   const alreadyLogged=(S.nightly.history||[]).some(h=>h.date===t);
 
-  const stepRow=(item,idx)=>`
+  const stepRow=(item,idx,showDemo)=>`
     <div class="t-row">
       <button class="t-check${done.includes(item.id)?" done":""}" data-night="${item.id}">${done.includes(item.id)?"✓":""}</button>
       <div style="flex:1">
         <div class="t-name${done.includes(item.id)?" done":""}">${idx!=null?`<span style="color:var(--gold);font-family:'Cormorant Garamond',serif;font-weight:600;margin-right:6px">${idx}</span>`:""}${esc(item.name)}</div>
         <div style="font-family:'EB Garamond',serif;font-style:italic;font-size:.76rem;color:var(--muted);margin-top:2px;line-height:1.4">${esc(item.note)}</div>
       </div>
+      ${showDemo?`<button class="demo-btn" data-demo-night="${item.id}" title="See how">▶</button>`:""}
     </div>`;
 
   return`
@@ -1819,10 +1952,12 @@ function renderNightly(){
     ${steps.map((s,i)=>stepRow(s,i+1)).join("")}
 
     <div class="stitle">Face Massage</div>
-    ${massages.map(m=>stepRow(m,null)).join("")}
+    <button class="fa-start-btn" data-fa="nightly-massage">▶ Follow along — massages</button>
+    ${massages.map(m=>stepRow(m,null,true)).join("")}
 
     <div class="stitle">Face &amp; Jaw Exercises</div>
-    ${exs.map(e=>stepRow(e,null)).join("")}
+    <button class="fa-start-btn" data-fa="nightly-exercise">▶ Follow along — exercises</button>
+    ${exs.map(e=>stepRow(e,null,true)).join("")}
 
     <button class="complete-btn" id="log-nightly-btn" ${alreadyLogged?'style="opacity:.6"':''}>
       ${alreadyLogged?"Routine logged for today ✓":"Log tonight's routine"}
@@ -1854,6 +1989,18 @@ function attachNightlyHandlers(){
     if(i>=0) log.splice(i,1); else log.push(id);
     save(); renderContent();
   });
+  // single-exercise demo popups
+  document.querySelectorAll("[data-demo-night]").forEach(el=>el.onclick=(ev)=>{
+    ev.stopPropagation();
+    const id=el.dataset.demoNight;
+    const item=[...S.nightly.massages,...S.nightly.exercises].find(x=>x.id===id);
+    if(item) openFollowAlong([item],item.name);
+  });
+  // follow-along whole section
+  document.querySelectorAll("[data-fa]").forEach(el=>el.onclick=()=>{
+    if(el.dataset.fa==="nightly-massage") openFollowAlong(S.nightly.massages,"Face Massage");
+    else if(el.dataset.fa==="nightly-exercise") openFollowAlong(S.nightly.exercises,"Face & Jaw Exercises");
+  });
   const logBtn=document.getElementById("log-nightly-btn");
   if(logBtn) logBtn.onclick=()=>{
     const dow=todayDow();
@@ -1865,6 +2012,105 @@ function attachNightlyHandlers(){
     const existing=S.nightly.history.find(h=>h.date===t);
     if(existing){existing.done=done;existing.total=total;}
     else S.nightly.history.push({date:t,done,total});
+    save(); renderContent();
+  };
+}
+
+// ─── MORNING ROUTINE (inside Schedule) ───────────────────────────────────────
+function renderMorning(){
+  const t=today();
+  const done=S.morning.log[t]||[];
+  const stretches=S.morning.stretches;
+  const exs=S.morning.exercises;
+  const skin=S.morning.skincare;
+  const allItems=[...stretches,...exs,...skin];
+  const totalItems=allItems.length;
+  const doneCount=allItems.filter(x=>done.includes(x.id)).length;
+  const pct=totalItems?Math.round(doneCount/totalItems*100):0;
+  const alreadyLogged=(S.morning.history||[]).some(h=>h.date===t);
+
+  const stepRow=(item,idx,showDemo)=>`
+    <div class="t-row">
+      <button class="t-check${done.includes(item.id)?" done":""}" data-morning="${item.id}">${done.includes(item.id)?"✓":""}</button>
+      <div style="flex:1">
+        <div class="t-name${done.includes(item.id)?" done":""}">${idx!=null?`<span style="color:var(--gold);font-family:'Cormorant Garamond',serif;font-weight:600;margin-right:6px">${idx}</span>`:""}${esc(item.name)}</div>
+        <div style="font-family:'EB Garamond',serif;font-style:italic;font-size:.76rem;color:var(--muted);margin-top:2px;line-height:1.4">${esc(item.note)}</div>
+      </div>
+      ${showDemo?`<button class="demo-btn" data-demo-morning="${item.id}" title="See how">▶</button>`:""}
+    </div>`;
+
+  return`
+    <div class="hero" style="display:block">
+      <div class="hero-label" style="margin-top:0">Morning — Start the Day</div>
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:6px">
+        <div class="hero-pts" style="font-size:2.6rem">${doneCount}<span style="font-size:1.2rem;color:var(--muted)">/${totalItems}</span></div>
+        <div class="goal-label">${pct===100?"All done — let's go":`${pct}% complete`}</div>
+      </div>
+      <div class="bar-wrap"><div class="bar-fill green" style="width:${pct}%"></div></div>
+      <div style="font-family:'EB Garamond',serif;font-style:italic;font-size:.8rem;color:var(--muted)">Wake up · Stretch · Train · Skincare</div>
+    </div>
+
+    <div class="stitle">Wake up &amp; Stretch</div>
+    <button class="fa-start-btn" data-fa="morning-stretch">▶ Follow along — stretches</button>
+    ${stretches.map(s=>stepRow(s,null,true)).join("")}
+
+    <div class="stitle">Morning Exercise</div>
+    <button class="fa-start-btn" data-fa="morning-exercise">▶ Follow along — workout</button>
+    ${exs.map(e=>stepRow(e,null,true)).join("")}
+
+    <div class="stitle">Skincare — in order</div>
+    ${skin.map((s,i)=>stepRow(s,i+1)).join("")}
+
+    <button class="complete-btn" id="log-morning-btn" ${alreadyLogged?'style="opacity:.6"':''}>
+      ${alreadyLogged?"Routine logged for today ✓":"Log this morning's routine"}
+    </button>
+
+    ${(S.morning.history||[]).length?`
+      <div class="stitle">History</div>
+      ${S.morning.history.slice().reverse().slice(0,7).map(h=>`
+        <div class="money-entry">
+          <div class="money-entry-name" style="flex:1">${h.date}</div>
+          <div class="money-entry-amt in">${h.done}/${h.total} done</div>
+        </div>`).join("")}
+    `:""}
+
+    <div class="empty-state" style="margin-top:14px;text-align:left;font-style:normal">
+      <b style="font-family:'Cormorant Garamond',serif;letter-spacing:.05em">Why these are safe for you:</b><br>
+      Bodyweight moves like push-ups, dips, V-ups and planks are among the safest ways for a teen to build real muscle — the American Academy of Pediatrics and strength-training experts confirm they do NOT stunt growth. You can't overload because you ARE the weight. Focus on clean form over big numbers, stop at sharp or joint pain (soreness is fine), and take a rest day between hard sessions. Do dynamic stretches first to warm up cold muscles, and let good sleep + protein do the real growing.
+    </div>
+  `;
+}
+
+function attachMorningHandlers(){
+  const t=today();
+  if(!S.morning.log[t]) S.morning.log[t]=[];
+  document.querySelectorAll("[data-morning]").forEach(el=>el.onclick=()=>{
+    const id=el.dataset.morning;
+    const log=S.morning.log[t];
+    const i=log.indexOf(id);
+    if(i>=0) log.splice(i,1); else log.push(id);
+    save(); renderContent();
+  });
+  // single-exercise demo popups
+  document.querySelectorAll("[data-demo-morning]").forEach(el=>el.onclick=(ev)=>{
+    ev.stopPropagation();
+    const id=el.dataset.demoMorning;
+    const item=[...S.morning.stretches,...S.morning.exercises].find(x=>x.id===id);
+    if(item) openFollowAlong([item],item.name);
+  });
+  // follow-along whole section
+  document.querySelectorAll("[data-fa]").forEach(el=>el.onclick=()=>{
+    if(el.dataset.fa==="morning-stretch") openFollowAlong(S.morning.stretches,"Wake up & Stretch");
+    else if(el.dataset.fa==="morning-exercise") openFollowAlong(S.morning.exercises,"Morning Workout");
+  });
+  const logBtn=document.getElementById("log-morning-btn");
+  if(logBtn) logBtn.onclick=()=>{
+    const total=S.morning.stretches.length+S.morning.exercises.length+S.morning.skincare.length;
+    const done=(S.morning.log[t]||[]).length;
+    if(!S.morning.history) S.morning.history=[];
+    const existing=S.morning.history.find(h=>h.date===t);
+    if(existing){existing.done=done;existing.total=total;}
+    else S.morning.history.push({date:t,done,total});
     save(); renderContent();
   };
 }
@@ -2475,6 +2721,7 @@ function attachHandlers(){
  if(tab==="progress"){ attachProgressHandlers(); if(progView==="wishlist") attachWishlistHandlers(); return; }
  if(tab==="schedule"){
  document.querySelectorAll("[data-schedview]").forEach(el=>el.onclick=()=>{schedView=el.dataset.schedview;renderContent();});
+ if(schedView==="morning"){ attachMorningHandlers(); return; }
  if(schedView==="nightly"){ attachNightlyHandlers(); return; }
  const t=today(), dow=todayDow();
  const viewingToday=selDay===dow;
@@ -2670,6 +2917,370 @@ function downloadICS(){
 
 // ─── UTILS ───────────────────────────────────────────────────────────────────
 function esc(s){const d=document.createElement("div");d.textContent=s;return d.innerHTML;}
+
+// ─── EXERCISE ANIMATIONS (offline SVG, loop forever) ─────────────────────────
+// Clear side-view body demos with floor, motion arrows & labels. Built with SMIL.
+function animSVG(id){
+  const W='<svg class="anim-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">';
+  const E='</svg>';
+  const floor='<line x1="14" y1="168" x2="186" y2="168" stroke="#3A5474" stroke-width="3"/>';
+  const label=(t)=>`<text x="100" y="24" fill="#9DB0C6" font-family="EB Garamond,serif" font-style="italic" font-size="13" text-anchor="middle">${t}</text>`;
+  // reusable up/down arrow near a point
+  const arrowUp=(x,y)=>`<g stroke="#D8B25E" stroke-width="3" fill="none" opacity="0.9"><line x1="${x}" y1="${y}" x2="${x}" y2="${y-26}"><animate attributeName="opacity" values="1;0.2;1" dur="2s" repeatCount="indefinite"/></line><polyline points="${x-6},${y-18} ${x},${y-28} ${x+6},${y-18}"><animate attributeName="opacity" values="1;0.2;1" dur="2s" repeatCount="indefinite"/></polyline></g>`;
+
+  switch(id){
+    // ═══ CHEST / ARMS ═══
+    case "me1": // push-ups (side view, body pivots at feet, chest lowers)
+      return W+floor+label("Lower chest to floor, press up")+`
+        <g>
+          <g>
+            <animateTransform attributeName="transform" type="rotate" values="0 165 160;9 165 160;0 165 160" dur="2.2s" repeatCount="indefinite"/>
+            <!-- body plank line hips->head -->
+            <line x1="165" y1="160" x2="55" y2="120" stroke="#C9A24B" stroke-width="6" stroke-linecap="round"/>
+            <circle cx="48" cy="116" r="11" fill="#C9A24B"/>
+            <!-- arm from shoulder down to floor -->
+          </g>
+          <line x1="70" y1="127" x2="70" y2="168" stroke="#C9A24B" stroke-width="5" stroke-linecap="round">
+            <animate attributeName="x1" values="70;66;70" dur="2.2s" repeatCount="indefinite"/>
+            <animate attributeName="y1" values="127;140;127" dur="2.2s" repeatCount="indefinite"/>
+          </line>
+          <line x1="165" y1="160" x2="165" y2="168" stroke="#C9A24B" stroke-width="5"/>
+        </g>`+arrowUp(48,108)+E;
+    case "me2": // incline push-ups (hands on raised surface)
+      return W+floor+label("Hands on desk/bed, easier angle")+`
+        <rect x="30" y="95" width="46" height="8" fill="#3A5474"/>
+        <line x1="30" y1="103" x2="30" y2="168" stroke="#3A5474" stroke-width="3"/>
+        <g>
+          <g><animateTransform attributeName="transform" type="rotate" values="0 168 168;7 168 168;0 168 168" dur="2.2s" repeatCount="indefinite"/>
+            <line x1="168" y1="168" x2="70" y2="110" stroke="#C9A24B" stroke-width="6" stroke-linecap="round"/>
+            <circle cx="62" cy="105" r="11" fill="#C9A24B"/>
+          </g>
+          <line x1="70" y1="112" x2="53" y2="99" stroke="#C9A24B" stroke-width="5" stroke-linecap="round"><animate attributeName="x2" values="53;60;53" dur="2.2s" repeatCount="indefinite"/></line>
+        </g>`+E;
+    case "me3": // pike push-ups (A-shape, head dips down)
+      return W+floor+label("Hips high in an 'A', dip head down")+`
+        <g class="anim-fig" stroke="#C9A24B" stroke-width="6" fill="none" stroke-linecap="round">
+          <line x1="55" y1="168" x2="100" y2="70"/>
+          <line x1="100" y1="70" x2="150" y2="130"/>
+          <circle cx="55" cy="163" r="0"/>
+        </g>
+        <line x1="150" y1="130" x2="150" y2="168" stroke="#C9A24B" stroke-width="5" stroke-linecap="round"/>
+        <circle cx="150" cy="118" r="11" fill="#C9A24B">
+          <animate attributeName="cy" values="118;150;118" dur="2.2s" repeatCount="indefinite"/>
+          <animate attributeName="cx" values="150;160;150" dur="2.2s" repeatCount="indefinite"/>
+        </circle>`+E;
+    case "me4": // dips (between chairs, body drops & presses)
+      return W+floor+label("Sit on edge, lower & press up")+`
+        <line x1="55" y1="95" x2="55" y2="168" stroke="#3A5474" stroke-width="4"/>
+        <line x1="145" y1="95" x2="145" y2="168" stroke="#3A5474" stroke-width="4"/>
+        <line x1="40" y1="95" x2="70" y2="95" stroke="#3A5474" stroke-width="4"/>
+        <line x1="130" y1="95" x2="160" y2="95" stroke="#3A5474" stroke-width="4"/>
+        <g>
+          <circle cx="100" cy="70" r="11" fill="#C9A24B"><animate attributeName="cy" values="70;100;70" dur="2s" repeatCount="indefinite"/></circle>
+          <line x1="100" y1="80" x2="100" y2="120" stroke="#C9A24B" stroke-width="6" stroke-linecap="round">
+            <animate attributeName="y1" values="80;110;80" dur="2s" repeatCount="indefinite"/>
+            <animate attributeName="y2" values="120;140;120" dur="2s" repeatCount="indefinite"/>
+          </line>
+          <line x1="100" y1="120" x2="130" y2="130" stroke="#C9A24B" stroke-width="5" stroke-linecap="round"><animate attributeName="y1" values="120;140;120" dur="2s" repeatCount="indefinite"/></line>
+          <!-- arms to the chairs -->
+          <line x1="100" y1="85" x2="60" y2="95" stroke="#C9A24B" stroke-width="4"><animate attributeName="y1" values="85;110;85" dur="2s" repeatCount="indefinite"/></line>
+          <line x1="100" y1="85" x2="140" y2="95" stroke="#C9A24B" stroke-width="4"><animate attributeName="y1" values="85;110;85" dur="2s" repeatCount="indefinite"/></line>
+        </g>`+E;
+    // ═══ ABS ═══
+    case "me5": // V-ups (legs + torso rise to meet, forming a V)
+      return W+floor+label("Lift legs + chest together into a 'V'")+`
+        <g stroke="#C9A24B" stroke-width="6" fill="none" stroke-linecap="round">
+          <!-- torso -->
+          <line x1="100" y1="160" x2="70" y2="150">
+            <animate attributeName="x2" values="55;95;55" dur="2.4s" repeatCount="indefinite"/>
+            <animate attributeName="y2" values="162;95;162" dur="2.4s" repeatCount="indefinite"/>
+          </line>
+          <!-- legs -->
+          <line x1="100" y1="160" x2="150" y2="150">
+            <animate attributeName="x2" values="165;105;165" dur="2.4s" repeatCount="indefinite"/>
+            <animate attributeName="y2" values="162;95;162" dur="2.4s" repeatCount="indefinite"/>
+          </line>
+        </g>
+        <circle cx="60" cy="150" r="9" fill="#C9A24B">
+          <animate attributeName="cx" values="48;92;48" dur="2.4s" repeatCount="indefinite"/>
+          <animate attributeName="cy" values="160;88;160" dur="2.4s" repeatCount="indefinite"/>
+        </circle>`+E;
+    case "me8": // crunches (only shoulders curl up, hips stay)
+      return W+floor+label("Curl shoulders up, hips stay down")+`
+        <g stroke="#C9A24B" stroke-width="6" fill="none" stroke-linecap="round">
+          <!-- bent legs -->
+          <line x1="140" y1="160" x2="120" y2="130"/>
+          <line x1="120" y1="130" x2="95" y2="160"/>
+          <!-- hips to shoulders (curls) -->
+          <line x1="95" y1="160" x2="55" y2="152">
+            <animate attributeName="x2" values="55;72;55" dur="2s" repeatCount="indefinite"/>
+            <animate attributeName="y2" values="158;135;158" dur="2s" repeatCount="indefinite"/>
+          </line>
+        </g>
+        <circle cx="52" cy="150" r="9" fill="#C9A24B">
+          <animate attributeName="cx" values="50;70;50" dur="2s" repeatCount="indefinite"/>
+          <animate attributeName="cy" values="155;128;155" dur="2s" repeatCount="indefinite"/>
+        </circle>`+arrowUp(60,120)+E;
+    case "me9": // bicycle crunches (knees pedal, elbow to opposite knee)
+      return W+floor+label("Elbow to opposite knee, pedal legs")+`
+        <g stroke="#C9A24B" stroke-width="6" fill="none" stroke-linecap="round">
+          <!-- shoulders lifted -->
+          <line x1="70" y1="145" x2="100" y2="150"/>
+          <!-- one knee in, other extended - alternate -->
+          <line x1="100" y1="150" x2="130" y2="120">
+            <animate attributeName="x2" values="130;155;130" dur="1.6s" repeatCount="indefinite"/>
+            <animate attributeName="y2" values="120;150;120" dur="1.6s" repeatCount="indefinite"/>
+          </line>
+          <line x1="100" y1="150" x2="130" y2="150">
+            <animate attributeName="x2" values="155;130;155" dur="1.6s" repeatCount="indefinite"/>
+            <animate attributeName="y2" values="150;120;150" dur="1.6s" repeatCount="indefinite"/>
+          </line>
+        </g>
+        <circle cx="62" cy="142" r="9" fill="#C9A24B"/>
+        <text x="100" y="52" fill="#D8B25E" font-family="EB Garamond,serif" font-size="12" text-anchor="middle" font-style="italic">twist side to side</text>`+E;
+    case "me6": // plank (hold straight line, HOLD label)
+      return W+floor+label("Hold a straight line, squeeze core")+`
+        <g class="anim-fig" stroke="#C9A24B" stroke-width="6" fill="none" stroke-linecap="round">
+          <line x1="150" y1="160" x2="55" y2="128"/>
+          <line x1="70" y1="134" x2="72" y2="160"/>
+          <line x1="150" y1="160" x2="150" y2="160"/>
+        </g>
+        <circle cx="48" cy="124" r="11" fill="#C9A24B"/>
+        <line x1="150" y1="160" x2="150" y2="168" stroke="#C9A24B" stroke-width="5"/>
+        <text x="115" y="60" fill="#7FB09A" font-family="Cormorant Garamond,serif" font-size="20" font-weight="600" text-anchor="middle">HOLD</text>
+        <text x="115" y="78" fill="#5E7590" font-family="EB Garamond,serif" font-size="11" font-style="italic" text-anchor="middle">30-45 sec</text>`+E;
+    case "me7": // leg raises (straight legs lift to 90 and lower)
+      return W+floor+label("Lift straight legs up, lower slow")+`
+        <g stroke="#C9A24B" stroke-width="6" fill="none" stroke-linecap="round">
+          <!-- back flat on floor -->
+          <line x1="45" y1="160" x2="105" y2="160"/>
+          <!-- legs raise -->
+          <line x1="105" y1="160" x2="155" y2="130">
+            <animate attributeName="x2" values="165;108;165" dur="2.4s" repeatCount="indefinite"/>
+            <animate attributeName="y2" values="158;80;158" dur="2.4s" repeatCount="indefinite"/>
+          </line>
+        </g>
+        <circle cx="42" cy="158" r="9" fill="#C9A24B"/>`+arrowUp(150,120)+E;
+    case "me10": // mountain climbers (plank, knees drive in alternately)
+      return W+floor+label("Plank position, drive knees in fast")+`
+        <g stroke="#C9A24B" stroke-width="6" fill="none" stroke-linecap="round">
+          <line x1="150" y1="150" x2="60" y2="120"/>
+          <line x1="60" y1="122" x2="62" y2="168"/>
+          <!-- back leg / driving knee -->
+          <line x1="150" y1="150" x2="150" y2="168"/>
+          <line x1="150" y1="150" x2="120" y2="150">
+            <animate attributeName="x2" values="150;100;150" dur="1.2s" repeatCount="indefinite"/>
+            <animate attributeName="y2" values="168;145;168" dur="1.2s" repeatCount="indefinite"/>
+          </line>
+        </g>
+        <circle cx="53" cy="116" r="11" fill="#C9A24B"/>`+E;
+    // ═══ STRETCHES ═══
+    case "ms1": // neck rolls
+      return W+label("Roll head slowly in circles")+`
+        <line x1="100" y1="105" x2="100" y2="165" stroke="#C9A24B" stroke-width="6" stroke-linecap="round"/>
+        <g>
+          <circle cx="100" cy="80" r="20" fill="none" stroke="#C9A24B" stroke-width="6"/>
+          <circle cx="100" cy="62" r="4" fill="#D8B25E">
+            <animateTransform attributeName="transform" type="rotate" from="0 100 82" to="360 100 82" dur="3.5s" repeatCount="indefinite"/>
+          </circle>
+        </g>`+E;
+    case "ms2": // cat-cow
+      return W+floor+label("Arch & round your back slowly")+`
+        <g stroke="#C9A24B" stroke-width="6" fill="none" stroke-linecap="round">
+          <path d="M60 120 Q100 100 140 120">
+            <animate attributeName="d" values="M60 120 Q100 98 140 120;M60 126 Q100 148 140 126;M60 120 Q100 98 140 120" dur="2.6s" repeatCount="indefinite"/>
+          </path>
+          <line x1="60" y1="120" x2="55" y2="160"><animate attributeName="y1" values="120;126;120" dur="2.6s" repeatCount="indefinite"/></line>
+          <line x1="60" y1="120" x2="66" y2="160"><animate attributeName="y1" values="120;126;120" dur="2.6s" repeatCount="indefinite"/></line>
+          <line x1="140" y1="120" x2="140" y2="160"/>
+        </g>
+        <circle cx="150" cy="118" r="9" fill="#C9A24B"><animate attributeName="cy" values="118;126;118" dur="2.6s" repeatCount="indefinite"/></circle>`+E;
+    case "ms3": // standing side reach
+      return W+floor+label("Reach overhead, lean side to side")+`
+        <g stroke="#C9A24B" stroke-width="6" fill="none" stroke-linecap="round">
+          <g><animateTransform attributeName="transform" type="rotate" values="-14 100 150;14 100 150;-14 100 150" dur="3s" repeatCount="indefinite"/>
+            <line x1="100" y1="95" x2="100" y2="150"/>
+            <line x1="100" y1="95" x2="100" y2="55"/>
+          </g>
+          <line x1="100" y1="150" x2="86" y2="168"/>
+          <line x1="100" y1="150" x2="114" y2="168"/>
+        </g>
+        <circle cx="100" cy="46" r="9" fill="#C9A24B"><animateTransform attributeName="transform" type="rotate" values="-14 100 150;14 100 150;-14 100 150" dur="3s" repeatCount="indefinite"/></circle>`+E;
+    case "ms4": // arm circles
+      return W+floor+label("Big slow arm circles")+`
+        <g stroke="#C9A24B" stroke-width="6" fill="none" stroke-linecap="round">
+          <line x1="100" y1="70" x2="100" y2="135"/>
+          <line x1="100" y1="135" x2="88" y2="168"/>
+          <line x1="100" y1="135" x2="112" y2="168"/>
+          <line x1="100" y1="82" x2="135" y2="82" stroke-width="5"><animateTransform attributeName="transform" type="rotate" from="0 100 82" to="360 100 82" dur="2s" repeatCount="indefinite"/></line>
+        </g>
+        <circle cx="100" cy="58" r="10" fill="#C9A24B"/>`+E;
+    case "ms5": // world's greatest stretch (deep lunge + reach up)
+      return W+floor+label("Deep lunge, reach one arm up")+`
+        <g stroke="#C9A24B" stroke-width="6" fill="none" stroke-linecap="round">
+          <line x1="90" y1="80" x2="98" y2="128"/>
+          <!-- front bent leg -->
+          <line x1="98" y1="128" x2="80" y2="150"/><line x1="80" y1="150" x2="80" y2="168"/>
+          <!-- back leg extended -->
+          <line x1="98" y1="128" x2="150" y2="168"/>
+          <!-- down arm -->
+          <line x1="94" y1="100" x2="72" y2="150"/>
+          <!-- reaching arm -->
+          <line x1="94" y1="100" x2="120" y2="70"><animate attributeName="x2" values="120;128;120" dur="2.6s" repeatCount="indefinite"/><animate attributeName="y2" values="70;58;70" dur="2.6s" repeatCount="indefinite"/></line>
+        </g>
+        <circle cx="88" cy="72" r="9" fill="#C9A24B"/>`+E;
+    case "ms6": // leg swings
+      return W+floor+label("Hold wall, swing leg front & back")+`
+        <line x1="150" y1="40" x2="150" y2="168" stroke="#3A5474" stroke-width="4"/>
+        <g stroke="#C9A24B" stroke-width="6" fill="none" stroke-linecap="round">
+          <line x1="110" y1="70" x2="110" y2="120"/>
+          <line x1="110" y1="120" x2="110" y2="168"/>
+          <line x1="110" y1="120" x2="110" y2="165">
+            <animateTransform attributeName="transform" type="rotate" values="-32 110 120;32 110 120;-32 110 120" dur="2s" repeatCount="indefinite"/>
+          </line>
+          <line x1="110" y1="85" x2="145" y2="72"/>
+        </g>
+        <circle cx="110" cy="58" r="10" fill="#C9A24B"/>`+E;
+    // ═══ FACE EXERCISES ═══
+    case "e1": // chin tucks (head glides straight back)
+      return W+label("Glide chin straight back")+faceHead(`<animateTransform attributeName="transform" type="translate" values="14 0;-6 0;14 0" dur="2.2s" repeatCount="indefinite"/>`)+`<g stroke="#D8B25E" stroke-width="3" fill="none"><line x1="150" y1="90" x2="128" y2="90"><animate attributeName="opacity" values="1;0.2;1" dur="2.2s" repeatCount="indefinite"/></line><polyline points="136,84 126,90 136,96"><animate attributeName="opacity" values="1;0.2;1" dur="2.2s" repeatCount="indefinite"/></polyline></g>`+E;
+    case "e2": // neck curl-ups (head lifts off floor)
+      return W+`<line x1="30" y1="150" x2="170" y2="150" stroke="#3A5474" stroke-width="3"/>`+label("Lie down, lift head like a crunch")+faceHead(`<animateTransform attributeName="transform" type="translate" values="0 0;0 -22;0 0" dur="2.4s" repeatCount="indefinite"/>`,100,118)+E;
+    case "e3": // jaw jut (lower jaw pushes forward)
+      return W+label("Push lower jaw forward, hold")+faceHead('')+`<path d="M84 108 Q100 118 116 108" fill="none" stroke="#D8B25E" stroke-width="5"><animate attributeName="d" values="M84 108 Q100 118 116 108;M84 108 Q108 126 128 106;M84 108 Q100 118 116 108" dur="2.2s" repeatCount="indefinite"/></path>`+E;
+    case "e4": // vowel O-E (mouth opens O then wide E)
+      return W+label("Say big 'O' then wide 'E'")+faceHead('')+`<ellipse cx="100" cy="108" rx="12" ry="10" fill="none" stroke="#D8B25E" stroke-width="5"><animate attributeName="rx" values="10;22;10" dur="1.8s" repeatCount="indefinite"/><animate attributeName="ry" values="14;5;14" dur="1.8s" repeatCount="indefinite"/></ellipse>`+E;
+    case "e6": // collarbone chin-in
+      return W+label("Head level, glide back over shoulders")+faceHead(`<animateTransform attributeName="transform" type="translate" values="12 0;-6 0;12 0" dur="2.2s" repeatCount="indefinite"/>`)+E;
+    // ═══ FACE MASSAGES (arrows sweep across face) ═══
+    case "m1": return W+label("Sweep down sides of neck")+faceHead('')+sweep(100,120,60,158)+sweep(100,120,140,158)+E;
+    case "m2": return W+label("From chin, glide out to ears")+faceHead('')+sweep(100,112,150,118)+sweep(100,112,50,118)+E;
+    case "m3": return W+label("Push cheeks out toward ears")+faceHead('')+sweep(88,96,150,86)+sweep(112,96,50,86)+E;
+    case "m4": return W+label("Under-eye: inner to outer, light")+faceHead('')+sweep(88,86,145,80)+sweep(112,86,55,80)+E;
+    case "m5": return W+label("Forehead: center out to temples")+faceHead('')+sweep(100,60,150,58)+sweep(100,60,50,58)+E;
+    default:
+      return W+label("follow the steps below")+E;
+  }
+}
+// a clear front-facing face for face-exercise/massage demos
+function faceHead(extra,cx,cy){
+  cx=cx||100; cy=cy||88;
+  return `<g><g>${extra||''}
+    <circle cx="${cx}" cy="${cy}" r="46" fill="none" stroke="#C9A24B" stroke-width="6"/>
+    <circle cx="${cx-17}" cy="${cy-10}" r="4" fill="#C9A24B"/>
+    <circle cx="${cx+17}" cy="${cy-10}" r="4" fill="#C9A24B"/>
+    <path d="M${cx-15} ${cy+20} Q${cx} ${cy+30} ${cx+15} ${cy+20}" fill="none" stroke="#C9A24B" stroke-width="5"/>
+  </g></g>`;
+}
+// a moving arrow showing massage/sweep direction
+function sweep(x1,y1,x2,y2){
+  return `<g>
+    <line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#D8B25E" stroke-width="2" stroke-dasharray="4 4" opacity="0.4"/>
+    <circle cx="${x1}" cy="${y1}" r="6" fill="#D8B25E" stroke="none">
+      <animate attributeName="cx" values="${x1};${x2};${x1}" dur="2.2s" repeatCount="indefinite"/>
+      <animate attributeName="cy" values="${y1};${y2};${y1}" dur="2.2s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="1;0.15;1" dur="2.2s" repeatCount="indefinite"/>
+    </circle>
+  </g>`;
+}
+
+// ─── FOLLOW-ALONG MODE ───────────────────────────────────────────────────────
+let faItems=[], faIdx=0, faTitle="", faTimer=null, faSecs=0, faRunning=false;
+
+// pick a sensible duration (sec) for an item from its note text, else a default
+function faDuration(item){
+  const n=(item.note||"");
+  // explicit "30 sec" / "45 sec"
+  let m=n.match(/(\d+)\s*-?\s*(\d+)?\s*sec/i);
+  if(m){ return m[2]?Math.round((Number(m[1])+Number(m[2]))/2):Number(m[1]); }
+  // "hold 10s" style
+  m=n.match(/hold\s*(\d+)\s*s/i);
+  if(m) return +m[1]<=15?20:+m[1];
+  // stretches → 30s hold; exercises with reps → ~40s; massages/face → 45s
+  if(/each side|reps|sets/i.test(n)) return 40;
+  return 30;
+}
+function openFollowAlong(items,title){
+  faItems=items; faIdx=0; faTitle=title;
+  drawFollowAlong();
+}
+function stopFaTimer(){ clearInterval(faTimer); faTimer=null; faRunning=false; }
+function closeFollowAlong(){
+  stopFaTimer();
+  faItems=[]; document.getElementById("fa-modal-root").innerHTML="";
+}
+function faBeep(){
+  try{
+    const ctx=new (window.AudioContext||window.webkitAudioContext)();
+    const o=ctx.createOscillator(), g=ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.frequency.value=660; g.gain.value=0.15;
+    o.start(); o.stop(ctx.currentTime+0.18);
+  }catch(e){}
+}
+function faMMSS(s){ const m=Math.floor(s/60), ss=s%60; return (m>0?m+":":"")+(m>0?String(ss).padStart(2,"0"):ss); }
+function startFaTimer(){
+  stopFaTimer();
+  faRunning=true;
+  faTimer=setInterval(()=>{
+    faSecs--;
+    if(faSecs<=0){
+      stopFaTimer();
+      faBeep();
+      faSecs=0;
+      updateFaTimerUI(true);
+      return;
+    }
+    updateFaTimerUI(false);
+  },1000);
+  updateFaTimerUI(false);
+}
+function updateFaTimerUI(done){
+  const t=document.getElementById("fa-timer");
+  const b=document.getElementById("fa-timer-btn");
+  if(t) t.textContent=done?"Time's up ✓":faMMSS(faSecs)+(faSecs<=1?" sec":" sec");
+  if(t) t.style.color=done?"var(--green)":"var(--gold)";
+  if(b) b.textContent=faRunning?"⏸ Pause":(faSecs>0?"▶ Start":"↺ Restart");
+}
+function drawFollowAlong(){
+  stopFaTimer();
+  const root=document.getElementById("fa-modal-root");
+  if(!faItems.length){ root.innerHTML=""; return; }
+  const item=faItems[faIdx];
+  const pct=Math.round(((faIdx+1)/faItems.length)*100);
+  faSecs=faDuration(item);
+  root.innerHTML=`
+    <div class="fa-modal">
+      <div class="fa-head">
+        <div class="fa-kicker">${esc(faTitle)}</div>
+        <button class="fa-close" id="fa-close">×</button>
+      </div>
+      <div class="fa-count">${faIdx+1} of ${faItems.length}</div>
+      <div class="fa-progressbar"><div style="width:${pct}%"></div></div>
+      <div class="fa-stage">${animSVG(item.id)}</div>
+      <div class="fa-name">${esc(item.name)}</div>
+      <div class="fa-note">${esc(item.note)}</div>
+      <div class="fa-timer" id="fa-timer">${faMMSS(faSecs)} sec</div>
+      <button class="fa-start-btn" id="fa-timer-btn" style="margin-top:0;margin-bottom:12px">▶ Start</button>
+      <div class="fa-controls">
+        <button class="fa-nav" id="fa-prev" ${faIdx===0?"disabled":""}>‹ Prev</button>
+        <button class="fa-nav primary" id="fa-next">${faIdx===faItems.length-1?"Done ✓":"Next ›"}</button>
+      </div>
+    </div>`;
+  document.getElementById("fa-close").onclick=closeFollowAlong;
+  document.getElementById("fa-prev").onclick=()=>{if(faIdx>0){faIdx--;drawFollowAlong();}};
+  document.getElementById("fa-next").onclick=()=>{
+    if(faIdx<faItems.length-1){faIdx++;drawFollowAlong();}
+    else closeFollowAlong();
+  };
+  document.getElementById("fa-timer-btn").onclick=()=>{
+    if(faRunning){ stopFaTimer(); updateFaTimerUI(false); }
+    else {
+      if(faSecs<=0) faSecs=faDuration(item); // restart
+      startFaTimer();
+    }
+  };
+}
 
 // ─── INIT ────────────────────────────────────────────────────────────────────
 render();
