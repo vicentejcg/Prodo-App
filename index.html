@@ -811,9 +811,36 @@ function today() {
 }
 function p2(n){return String(n).padStart(2,"0")}
 
+// ─── SAFE STORAGE ────────────────────────────────────────────────────────────
+// Photos live in IndexedDB (big capacity). This JSON stays small (~25KB) and is
+// mirrored to a backup key, so a bad write can NEVER wipe your data again.
+const KEY_BAK = KEY + "_bak";
+
 function load() {
- try { const r=localStorage.getItem(KEY); if(r) return JSON.parse(r); } catch(e){}
+ const tryParse=(k)=>{
+  try { const r=localStorage.getItem(k); if(r) return JSON.parse(r); } catch(e){ console.error("Prodo: could not read",k,e); }
+  return null;
+ };
+ // main → backup → (last resort) defaults
+ let d=tryParse(KEY);
+ if(!d){
+  d=tryParse(KEY_BAK);
+  if(d) console.warn("Prodo: main save was unreadable — restored from backup.");
+ }
+ if(d) return d;
+ // Nothing readable. Keep any raw string aside instead of destroying it.
+ try{
+  const raw=localStorage.getItem(KEY);
+  if(raw) localStorage.setItem(KEY+"_corrupt", raw);
+ }catch(e){}
  return defaultData();
+}
+
+let quotaWarned=false;
+function warnStorageFull(){
+ if(quotaWarned) return;
+ quotaWarned=true;
+ alert("⚠️ Storage is full — your last change could NOT be saved.\n\nDelete a few progress photos or wishlist images to free space, then try again. Nothing already saved was lost.");
 }
 
 // ─── LOCAL SAVE (no cloud — data lives safely in this device's browser) ───────
@@ -821,7 +848,112 @@ let appReady=false; // set true after migrations, so autoLog never runs half-set
 function save() {
  // auto-log today's progress on every change — replaces the old "Log" buttons
  if(appReady){ try { autoLogDay(today()); } catch(e){} }
- try { localStorage.setItem(KEY,JSON.stringify(S)); } catch(e){}
+ let data;
+ try { data=JSON.stringify(S); } catch(e){ console.error("Prodo: serialize failed",e); return; }
+ try {
+  localStorage.setItem(KEY,data);
+  // mirror to backup only after the main write succeeded
+  try { localStorage.setItem(KEY_BAK,data); } catch(e){}
+ } catch(e) {
+  console.error("Prodo: SAVE FAILED",e);
+  // free room by dropping the backup, then retry once
+  try { localStorage.removeItem(KEY_BAK); localStorage.setItem(KEY,data); return; } catch(e2){}
+  warnStorageFull();
+ }
+}
+
+// Drop raw day-by-day logs older than 180 days (the small history summaries stay).
+function pruneOldLogs(){
+ const c=new Date(); c.setDate(c.getDate()-180);
+ const cut=c.getFullYear()+"-"+p2(c.getMonth()+1)+"-"+p2(c.getDate());
+ const prune=(obj)=>{ if(obj&&typeof obj==="object") Object.keys(obj).forEach(k=>{ if(/^\d{4}-\d{2}-\d{2}$/.test(k)&&k<cut) delete obj[k]; }); };
+ prune(S.completions); prune(S.dayOverrides);
+ if(S.gym) prune(S.gym.gymLog);
+ if(S.nightly) prune(S.nightly.log);
+ if(S.morning) prune(S.morning.log);
+ if(S.nutrition) prune(S.nutrition.log);
+}
+
+// ─── IMAGE STORAGE (IndexedDB — keeps big photos OUT of the 5MB localStorage) ─
+const IDB_NAME="prodo_media", IDB_STORE="images";
+let idb=null, idbOK=false;
+let IMG={}; // in-memory cache: key -> dataURL
+
+function idbOpen(){
+ return new Promise(res=>{
+  try{
+   if(!window.indexedDB) return res(false);
+   const req=indexedDB.open(IDB_NAME,1);
+   req.onupgradeneeded=()=>{ const db=req.result; if(!db.objectStoreNames.contains(IDB_STORE)) db.createObjectStore(IDB_STORE); };
+   req.onsuccess=()=>{ idb=req.result; idbOK=true; res(true); };
+   req.onerror=()=>res(false);
+  }catch(e){ res(false); }
+ });
+}
+function idbPut(k,v){
+ return new Promise(res=>{
+  if(!idbOK) return res(false);
+  try{ const tx=idb.transaction(IDB_STORE,"readwrite"); tx.objectStore(IDB_STORE).put(v,k); tx.oncomplete=()=>res(true); tx.onerror=()=>res(false); }
+  catch(e){ res(false); }
+ });
+}
+function idbDel(k){
+ return new Promise(res=>{
+  if(!idbOK) return res(false);
+  try{ const tx=idb.transaction(IDB_STORE,"readwrite"); tx.objectStore(IDB_STORE).delete(k); tx.oncomplete=()=>res(true); tx.onerror=()=>res(false); }
+  catch(e){ res(false); }
+ });
+}
+function idbLoadAll(){
+ return new Promise(res=>{
+  if(!idbOK) return res({});
+  try{
+   const out={}, tx=idb.transaction(IDB_STORE,"readonly");
+   const req=tx.objectStore(IDB_STORE).openCursor();
+   req.onsuccess=e=>{ const c=e.target.result; if(c){ out[c.key]=c.value; c.continue(); } else res(out); };
+   req.onerror=()=>res({});
+  }catch(e){ res({}); }
+ });
+}
+// A stored value is either a dataURL (legacy, inline) or an IndexedDB key.
+function resolveImg(v){
+ if(!v) return "";
+ return v.indexOf("data:")===0 ? v : (IMG[v]||"");
+}
+// Save an image and return what to store in S (a key, or the dataURL as fallback)
+async function putImg(key,dataUrl){
+ IMG[key]=dataUrl;
+ const ok=await idbPut(key,dataUrl);
+ return ok?key:dataUrl; // if IndexedDB is unavailable, fall back to inline
+}
+async function delImg(v){
+ if(!v||v.indexOf("data:")===0) return;
+ delete IMG[v];
+ await idbDel(v);
+}
+// One-time: move any inline base64 photos out of localStorage into IndexedDB.
+async function migrateInlineImages(){
+ if(!idbOK) return;
+ let moved=0;
+ for(const it of (S.wishlist&&S.wishlist.items)||[]){
+  if(it.img && it.img.indexOf("data:")===0){
+   const k="w_"+it.id;
+   if(await idbPut(k,it.img)){ IMG[k]=it.img; it.img=k; moved++; }
+  }
+ }
+ const movePhotos=async(arr,prefix,slots)=>{
+  for(const e of arr||[]){
+   for(const s of slots){
+    if(e[s] && e[s].indexOf("data:")===0){
+     const k=prefix+"_"+e.month+"_"+s;
+     if(await idbPut(k,e[s])){ IMG[k]=e[s]; e[s]=k; moved++; }
+    }
+   }
+  }
+ };
+ await movePhotos(S.physique,"ph",["front","back","side"]);
+ await movePhotos(S.facePhotos,"fa",["front","side"]);
+ if(moved){ console.log("Prodo: moved "+moved+" photos to IndexedDB — localStorage freed."); save(); }
 }
 
 // Export all data as a text string (for manual backups)
@@ -1230,6 +1362,29 @@ if(!S._restoredJul13){
  }
  autoLogDay(d);
  S._restoredJul13=true;
+ save();
+}
+
+// ── This week's gym: Mon 13, Tue 14, Wed 15 — went every day ──
+if(!S._gymWeekJul15){
+ ["2026-07-13","2026-07-14","2026-07-15"].forEach(d=>{
+  const dow=new Date(d+"T12:00:00").getDay();
+  if(!S.gym.attendance.includes(d)) S.gym.attendance.push(d);
+  const routine=S.gym.routines[dow];
+  if(routine){
+   if(!S.gym.gymLog[d]) S.gym.gymLog[d]={};
+   routine.exercises.forEach(ex=>{
+    if(!S.gym.gymLog[d][ex.id]) S.gym.gymLog[d][ex.id]=ex.sets.map(s=>({...s}));
+    S.gym.gymLog[d][ex.id].forEach(s=>s.done=true);
+    const maxReps=Math.max(...S.gym.gymLog[d][ex.id].map(s=>s.reps),0);
+    if(maxReps>0){
+     const cur=S.gym.prs[ex.id];
+     if(!cur||maxReps>=cur.reps) S.gym.prs[ex.id]={name:ex.name,reps:maxReps,date:d};
+    }
+   });
+  }
+ });
+ S._gymWeekJul15=true;
  save();
 }
 
@@ -2258,7 +2413,7 @@ function renderWishlist(){
       ${filtered.map(i=>`
         <div class="wish-card">
           <button class="wish-del" data-wdel="${i.id}">×</button>
-          ${i.img?`<img src="${i.img}" class="wish-img"/>`:`<div class="wish-img-empty">No photo</div>`}
+          ${resolveImg(i.img)?`<img src="${resolveImg(i.img)}" class="wish-img"/>`:`<div class="wish-img-empty">No photo</div>`}
           <div class="wish-info">
             <div class="wish-name">${esc(i.name)}</div>
             ${i.price?`<div class="wish-price">${fmtMoney(i.price)}</div>`:""}
@@ -2294,7 +2449,9 @@ function attachWishlistHandlers(){
   if(catInput) catInput.onkeydown=e=>{if(e.key==="Enter")saveCat();};
   const catCancel=document.getElementById("wish-cat-cancel");
   if(catCancel) catCancel.onclick=()=>{wishCatFormOpen=false;renderContent();};
-  document.querySelectorAll("[data-wdel]").forEach(el=>el.onclick=()=>{
+  document.querySelectorAll("[data-wdel]").forEach(el=>el.onclick=async()=>{
+    const it=S.wishlist.items.find(i=>i.id===el.dataset.wdel);
+    if(it) await delImg(it.img);
     S.wishlist.items=S.wishlist.items.filter(i=>i.id!==el.dataset.wdel);
     save();renderContent();
   });
@@ -2306,13 +2463,16 @@ function attachWishlistHandlers(){
     compressImage(file,600,dataUrl=>{wishFormImg=dataUrl;renderContent();});
   };
   const saveBtn=document.getElementById("wish-save-btn");
-  if(saveBtn) saveBtn.onclick=()=>{
+  if(saveBtn) saveBtn.onclick=async()=>{
     const name=document.getElementById("wish-name").value.trim();
     if(!name){alert("Give the item a name");return;}
     const price=+document.getElementById("wish-price").value||0;
     const cat=document.getElementById("wish-cat-sel").value;
     const link=document.getElementById("wish-link").value.trim();
-    S.wishlist.items.push({id:"w"+Date.now(),name,price,cat,link,img:wishFormImg});
+    const id="w"+Date.now();
+    // photo goes to IndexedDB — never into the 5MB localStorage blob
+    const imgRef=wishFormImg?await putImg("w_"+id,wishFormImg):"";
+    S.wishlist.items.push({id,name,price,cat,link,img:imgRef});
     wishFormOpen=false;wishFormImg="";save();renderContent();
   };
   const cancelBtn=document.getElementById("wish-cancel-btn");
@@ -2492,7 +2652,7 @@ function progPhotoPage(kind){
   const months=[...arr].sort((a,b)=>b.month.localeCompare(a.month));
 
   const slotBox=(entry,slot)=>{
-    const img=entry&&entry[slot];
+    const img=resolveImg(entry&&entry[slot]);
     return`<div style="flex:1">
       <div style="font-family:'Cormorant Garamond',serif;font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);text-align:center;margin-bottom:4px">${slot}</div>
       ${img
@@ -2533,21 +2693,23 @@ function attachPhotoHandlers(){
     inp.onchange=e=>{
       const file=e.target.files[0]; if(!file)return;
       const[kind,mk,slot]=inp.dataset.photoAdd.split("|");
-      compressImage(file,900,dataUrl=>{
+      compressImage(file,900,async dataUrl=>{
         const arr=kind==="physique"?S.physique:S.facePhotos;
         let entry=arr.find(x=>x.month===mk);
         if(!entry){ entry={id:"p"+Date.now(),month:mk}; arr.push(entry); }
-        entry[slot]=dataUrl;
+        // photo goes to IndexedDB, not into the 5MB localStorage blob
+        entry[slot]=await putImg((kind==="physique"?"ph":"fa")+"_"+mk+"_"+slot,dataUrl);
         save(); renderContent();
       });
     };
   });
   document.querySelectorAll("[data-photo-del]").forEach(btn=>{
-    btn.onclick=()=>{
+    btn.onclick=async()=>{
       const[kind,mk,slot]=btn.dataset.photoDel.split("|");
       const arr=kind==="physique"?S.physique:S.facePhotos;
       const entry=arr.find(x=>x.month===mk);
       if(entry){
+        await delImg(entry[slot]);
         delete entry[slot];
         const slots=kind==="physique"?["front","back","side"]:["front","side"];
         if(!slots.some(s=>entry[s])){
@@ -3396,11 +3558,18 @@ function drawFollowAlong(){
 }
 
 // ─── INIT ────────────────────────────────────────────────────────────────────
-appReady=true;       // migrations done — auto-logging can safely run now
-autoLogDay(today()); // catch up today's progress on open
-render();
-if(S.notifEnabled&&"Notification"in window&&Notification.permission==="granted") scheduleNotifs();
-setInterval(()=>{if(tab==="schedule")renderContent();},60000);
+(async function bootstrap(){
+ await idbOpen();            // open the photo store (big capacity)
+ IMG = await idbLoadAll();   // pull photos into memory so rendering stays instant
+ await migrateInlineImages();// one-time: move old inline photos out of localStorage
+ pruneOldLogs();             // drop raw day logs older than 180 days
+ appReady=true;              // migrations done — auto-logging can safely run now
+ autoLogDay(today());        // catch up today's progress on open
+ save();
+ render();
+ if(S.notifEnabled&&"Notification"in window&&Notification.permission==="granted") scheduleNotifs();
+ setInterval(()=>{if(tab==="schedule")renderContent();},60000);
+})();
 </script>
 </body>
 </html>
