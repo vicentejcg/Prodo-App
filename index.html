@@ -1388,6 +1388,47 @@ if(!S._gymWeekJul15){
  save();
 }
 
+// ── One-time: log Sat 18, Sun 19 & Mon 20 — did everything, forgot Sat & Sun ──
+if(!S._restoredJul20){
+ ["2026-07-18","2026-07-19","2026-07-20"].forEach(d=>{
+  const dow=new Date(d+"T12:00:00").getDay();
+  // Schedule: mark every activity of that day as done
+  const acts=(S.dayOverrides&&S.dayOverrides[d])?S.dayOverrides[d]:(S.activities[dow]||[]);
+  if(!S.completions) S.completions={};
+  if(!S.completions[d]) S.completions[d]=[];
+  acts.forEach(a=>{ if(!S.completions[d].includes(a.id)) S.completions[d].push(a.id); });
+  // Gym: mark that day's routine sets done
+  const routine=S.gym.routines[dow];
+  if(routine){
+   if(!S.gym.gymLog[d]) S.gym.gymLog[d]={};
+   routine.exercises.forEach(ex=>{
+    if(!S.gym.gymLog[d][ex.id]) S.gym.gymLog[d][ex.id]=ex.sets.map(s=>({...s}));
+    S.gym.gymLog[d][ex.id].forEach(s=>s.done=true);
+   });
+  }
+  // Morning + nightly routines fully done
+  if(S.morning){
+   const items=[...(S.morning.stretches||[]),...(S.morning.exercises||[]),...(S.morning.skincare||[])];
+   if(!S.morning.log) S.morning.log={};
+   S.morning.log[d]=items.map(x=>x.id);
+  }
+  if(S.nightly){
+   const isStrong=(dow===1||dow===3||dow===5);
+   const steps=S.nightly.steps.filter(s=>s.dayType==="all"||(s.dayType==="strong"&&isStrong)||(s.dayType==="serum"&&!isStrong)||(s.dayType==="sunday"&&dow===0)||(s.dayType==="clay"&&(dow===4||dow===0)));
+   if(!S.nightly.log) S.nightly.log={};
+   S.nightly.log[d]=[...steps,...S.nightly.massages,...S.nightly.exercises].map(x=>x.id);
+  }
+  // Nutrition: hit the goals
+  if(!S.nutrition.history) S.nutrition.history=[];
+  if(!S.nutrition.history.find(h=>h.date===d)){
+   S.nutrition.history.push({date:d,cals:S.nutrition.calGoal,protein:S.nutrition.proteinGoal,items:4});
+  }
+  autoLogDay(d); // writes schedule/stats/gym-attendance/PRs/routine history
+ });
+ S._restoredJul20=true;
+ save();
+}
+
 // new day check — auto-logs the finished day, then rolls the streak
 (function(){
  const last=S._lastOpen, t=today();
