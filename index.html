@@ -16,10 +16,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
 :root{
-  --paper:#FAFAF8;
+  --paper:#EFEFEC;
   --paper2:#FFFFFF;
   --sand:#FFFFFF;
-  --sand2:#F4F4F2;
+  --sand2:#F2F2EF;
   --line:#E6E6E2;
   --line2:#D2D2CD;
   --ink:#0A0A0A;
@@ -40,7 +40,7 @@
   --orange-g:rgba(110,110,106,0.06);
   --glow:0 0 0 1px rgba(0,0,0,0.04);
   --glow-soft:0 8px 30px rgba(0,0,0,0.06);
-  --r:2px;--r2:4px;
+  --r:14px;--r2:22px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
@@ -59,7 +59,7 @@ body{
 .app{
   max-width:460px;margin:0 auto;padding:30px 22px 110px;position:relative;z-index:2;
   min-height:100vh;
-  background:#FAFAF8;
+  background:#EFEFEC;
   border-radius:20px;
   -webkit-mask:
     radial-gradient(140% 120% at 50% 30%, #000 60%, transparent 100%);
@@ -108,25 +108,25 @@ body{
 .sys-online{color:var(--green)}
 
 /* main brand block: editorial header */
-.hud-panel{position:relative;margin-top:14px;padding:20px 22px;
-  background:var(--paper2);
-  border:1px solid var(--line);border-radius:var(--r2);
-  box-shadow:var(--glow-soft);
+.hud-panel{position:relative;margin-top:14px;padding:22px 24px;
+  background:var(--ink);
+  border:1px solid var(--ink);border-radius:var(--r2);
+  box-shadow:0 10px 34px rgba(0,0,0,0.18);
   display:flex;align-items:center;justify-content:space-between;overflow:hidden}
 .hud-panel::before{display:none}
 .hud-panel::after{display:none}
 .brand-line{display:flex;flex-direction:column;gap:4px;align-items:flex-start;position:relative;z-index:1}
 .brand-name{
   font-family:'Bodoni Moda',serif;font-size:2.1rem;font-weight:700;
-  color:var(--ink);letter-spacing:.02em;text-transform:none;line-height:1;
+  color:#FFFFFF;letter-spacing:.02em;text-transform:none;line-height:1;
 }
-.brand-sub{font-family:'Jost',sans-serif;font-size:.54rem;color:var(--muted);letter-spacing:.32em;text-transform:uppercase;font-weight:500}
+.brand-sub{font-family:'Jost',sans-serif;font-size:.54rem;color:rgba(255,255,255,0.55);letter-spacing:.32em;text-transform:uppercase;font-weight:500}
 .header-deco{display:none}
 .header-date{display:flex;flex-direction:column;align-items:flex-end;gap:2px;position:relative;z-index:1}
-.date-day{font-family:'Bodoni Moda',serif;font-size:.9rem;font-weight:600;color:var(--ink);letter-spacing:.02em;text-transform:uppercase}
-.date-full{font-family:'Jost',sans-serif;font-size:.56rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+.date-day{font-family:'Bodoni Moda',serif;font-size:.9rem;font-weight:600;color:#FFFFFF;letter-spacing:.02em;text-transform:uppercase}
+.date-full{font-family:'Jost',sans-serif;font-size:.56rem;color:rgba(255,255,255,0.6);letter-spacing:.1em;text-transform:uppercase}
 .date-day::after{display:none}
-.hud-clock{font-family:'Jost',sans-serif;font-size:.7rem;color:var(--faint);letter-spacing:.14em;margin-top:2px}
+.hud-clock{font-family:'Jost',sans-serif;font-size:.7rem;color:rgba(255,255,255,0.5);letter-spacing:.14em;margin-top:2px}
 
 /* ── TABS · minimal editorial ── */
 .tabs{display:flex;gap:0;flex-wrap:wrap;justify-content:stretch;margin:18px 0 26px;padding:0;border-bottom:1px solid var(--line)}
@@ -167,6 +167,32 @@ body{
 .cover-motive{font-family:'Jost',sans-serif;font-size:.82rem;color:var(--muted);text-align:center;margin-top:8px;line-height:1.5;max-width:280px;margin-left:auto;margin-right:auto}
 .pose-draw{flex:0 0 100%;margin-top:10px;background:#F4F4F2;border:1px solid var(--line);border-radius:var(--r2);padding:4px}
 .pose-svg{width:100%;height:130px;display:block}
+.rem-form{margin:12px 0;display:flex;flex-direction:column;gap:8px}
+.rem-form input[type=text]{width:100%}
+.rem-form-row{display:flex;gap:8px}
+.rem-form-row input{flex:1;min-width:0}
+.rem-form-row .add-btn{flex:0 0 44px}
+
+/* ── CALENDAR ── */
+.cal-head{display:flex;align-items:center;justify-content:space-between;margin:6px 0 16px}
+.cal-title{font-family:'Bodoni Moda',serif;font-size:1.15rem;font-weight:700;color:var(--ink);letter-spacing:.02em}
+.cal-nav{width:40px;height:40px;border-radius:50%;border:1px solid var(--line2);background:var(--paper2);color:var(--ink);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s}
+.cal-nav:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.cal-dow{text-align:center;font-family:'Jost',sans-serif;font-size:.62rem;font-weight:600;color:var(--faint);letter-spacing:.05em;padding-bottom:6px}
+.cal-cell{aspect-ratio:1;border:1px solid var(--line);background:var(--paper2);border-radius:12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;position:relative;transition:all .15s;padding:0}
+.cal-cell.empty{border:none;background:transparent;cursor:default}
+.cal-cell:hover:not(.empty){border-color:var(--ink)}
+.cal-num{font-family:'Jost',sans-serif;font-size:.82rem;font-weight:500;color:var(--ink)}
+.cal-cell.today{background:var(--ink)}
+.cal-cell.today .cal-num{color:#fff}
+.cal-cell.marked{border-color:var(--ink);border-width:1.5px}
+.cal-cell.sel{box-shadow:0 0 0 2px var(--ink)}
+.cal-dot{width:5px;height:5px;border-radius:50%;background:var(--ink)}
+.cal-cell.today .cal-dot{background:#fff}
+.cal-form{margin-top:16px;padding:16px;background:var(--paper2);border:1px solid var(--line);border-radius:16px}
+.cal-form-date{font-family:'Bodoni Moda',serif;font-size:.92rem;font-weight:600;color:var(--ink);text-transform:capitalize}
+.cal-remove{margin-top:10px;background:none;border:none;color:var(--burgundy);font-family:'Jost',sans-serif;font-size:.78rem;cursor:pointer;text-decoration:underline}
 
 /* swipeable widget carousel */
 .widget-wrap{margin-top:auto;padding-top:34px}
@@ -201,7 +227,18 @@ body{
 .card-body{padding:18px 20px}
 
 /* ── HERO ── */
-.hero{border-radius:var(--r2);padding:24px;margin-bottom:16px;position:relative;overflow:hidden;display:flex;justify-content:space-between;align-items:flex-start;border:1px solid var(--line);background:var(--paper2);box-shadow:var(--glow-soft)}
+.hero{border-radius:26px;padding:28px;margin-bottom:20px;position:relative;overflow:hidden;display:flex;justify-content:space-between;align-items:flex-start;border:1px solid var(--ink);background:var(--ink);color:#FAFAF8;box-shadow:0 10px 34px rgba(0,0,0,0.18)}
+.hero .hero-pts{color:#FFFFFF}
+.hero .hero-label{color:rgba(255,255,255,0.6)}
+.hero .goal-label,.hero .streak{color:rgba(255,255,255,0.8)}
+.hero .bar-wrap{background:rgba(255,255,255,0.15)}
+.hero div[style*="var(--muted)"]{color:rgba(255,255,255,0.65)!important}
+
+/* content fades/slides in when a page loads */
+#content{animation:pageIn .4s cubic-bezier(.2,.7,.2,1)}
+@keyframes pageIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.stitle,.t-row,.card,.hero,.money-stat{animation:riseIn .5s cubic-bezier(.2,.7,.2,1) backwards}
+@keyframes riseIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 .hero::before{display:none}
 .hero-pts{font-family:'Bodoni Moda',serif;font-size:3.8rem;font-weight:600;color:var(--ink);line-height:.85}
 .hero-label{font-family:'Jost',sans-serif;font-size:.58rem;color:var(--muted);font-weight:500;letter-spacing:.24em;text-transform:uppercase;margin-top:6px}
@@ -232,16 +269,16 @@ body{
 
 /* ── SECTION LABEL ── */
 .stitle{
-  font-family:'Bodoni Moda',serif;font-size:.82rem;font-weight:600;color:var(--forest);
-  letter-spacing:.18em;text-transform:uppercase;margin:26px 0 12px;
+  font-family:'Bodoni Moda',serif;font-size:.82rem;font-weight:700;color:var(--ink);
+  letter-spacing:.14em;text-transform:uppercase;margin:26px 0 12px;
   display:flex;align-items:center;gap:12px;
 }
-.stitle::before{content:"";width:5px;height:5px;background:var(--gold);border-radius:50%;flex-shrink:0}
+.stitle::before{content:"";width:14px;height:14px;background:var(--ink);border-radius:4px;flex-shrink:0}
 .stitle::after{content:"";flex:1;height:1px;background:var(--line2)}
 
-/* ── ROWS ── */
-.t-row{display:flex;align-items:center;gap:11px;padding:11px 15px;border-radius:var(--r);margin-bottom:5px;transition:all .2s}
-.t-row:hover{border-color:var(--line2);background:var(--sand2)}
+/* ── ROWS (card-like widgets) ── */
+.t-row{display:flex;align-items:center;gap:12px;padding:15px 17px;border-radius:16px;margin-bottom:9px;transition:all .2s;background:var(--paper2);border:1px solid var(--line)}
+.t-row:hover{border-color:var(--line2);box-shadow:var(--glow-soft)}
 .t-row:hover .del-btn{opacity:1}
 .t-row.now{background:var(--gold-g);border-color:var(--gold);box-shadow:inset 3px 0 0 var(--gold)}
 .t-time{width:96px;flex-shrink:0;font-family:'Jost',sans-serif;font-size:.72rem;font-weight:400;color:var(--faint);line-height:1.5;font-style:italic}
@@ -251,7 +288,7 @@ body{
 .t-check.done{background:var(--forest);border-color:var(--forest);box-shadow:var(--glow);color:var(--paper)}
 .t-name{flex:1;font-size:.98rem;font-weight:400;color:var(--ink);letter-spacing:.01em}
 .t-name.done{color:var(--faint);text-decoration:line-through;text-decoration-color:var(--line2)}
-.pts-chip{font-family:'Bodoni Moda',serif;font-size:.76rem;font-weight:600;color:var(--gold);background:transparent;border:1px solid var(--line2);border-radius:2px;padding:1px 8px;flex-shrink:0}
+.pts-chip{font-family:'Jost',sans-serif;font-size:.72rem;font-weight:600;color:var(--gold);background:var(--sand2);border:1px solid var(--line);border-radius:12px;padding:2px 10px;flex-shrink:0}
 .del-btn{opacity:0;background:none;border:none;color:var(--faint);cursor:pointer;font-size:15px;transition:all .15s;flex-shrink:0}
 .del-btn:hover{color:var(--burgundy)}
 
@@ -287,8 +324,8 @@ select{color:var(--muted);cursor:pointer;font-size:16px}
 /* ── ACTION / TAB BUTTONS ── */
 .action-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
 .action-btn,.gym-tab-btn,.nutr-tab-btn{
-  font-family:'Bodoni Moda',serif;font-size:.78rem;font-weight:600;padding:6px 14px;
-  border-radius:2px;border:1px solid var(--line2);background:transparent;
+  font-family:'Jost',sans-serif;font-size:.68rem;font-weight:600;padding:8px 16px;
+  border-radius:20px;border:1px solid var(--line2);background:var(--paper2);
   color:var(--muted);cursor:pointer;transition:all .18s;letter-spacing:.08em;text-transform:uppercase;
 }
 .action-btn:hover,.action-btn.on{border-color:var(--gold);background:var(--gold-g);color:var(--forest)}
@@ -462,11 +499,11 @@ textarea{width:100%;min-height:180px;resize:vertical;border-radius:var(--r2);lin
 .money-bar-fill{height:100%;background:var(--gold);transition:width .7s cubic-bezier(.4,0,.2,1)}
 .money-pct{font-family:'Jost',sans-serif;font-style:italic;font-size:.74rem;color:var(--faint);text-align:right;position:relative;z-index:1}
 .money-stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:8px}
-.money-stat{border-radius:var(--r);padding:15px 16px}
-.money-stat-val{font-family:'Bodoni Moda',serif;font-size:1.7rem;font-weight:700;line-height:1}
-.money-stat-val.green{color:var(--forest)}
-.money-stat-val.cyan{color:var(--gold)}
-.money-stat-val.gold{color:var(--gold)}
+.money-stat{border-radius:18px;padding:18px 18px;background:var(--paper2);border:1px solid var(--line)}
+.money-stat-val{font-family:'Bodoni Moda',serif;font-size:1.9rem;font-weight:700;line-height:1;color:var(--ink)}
+.money-stat-val.green{color:var(--ink)}
+.money-stat-val.cyan{color:var(--ink)}
+.money-stat-val.gold{color:var(--ink)}
 .money-stat-lbl{font-family:'Bodoni Moda',serif;font-size:.6rem;color:var(--faint);font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-top:6px}
 .money-entry{display:flex;align-items:center;gap:10px;padding:11px 15px;border-radius:var(--r);margin-bottom:4px}
 .money-entry:hover .del-btn{opacity:1}
@@ -762,6 +799,7 @@ function defaultData() {
  completions:{},
  notes:[],
  reminders:[],
+ calendarDates:{},
  journal:{tabs:[{id:"main",name:"Pensamientos"}],entries:{}},
  journal:{},
  dayHistory:{},
@@ -1346,7 +1384,7 @@ if(!S.nutrition.bodyweightKg) S.nutrition.bodyweightKg=59;
 // ── Notes (replaces Journal) ──
 if(!S.notes) S.notes=[];
 if(!S.reminders) S.reminders=[];
-// one-time: convert old journal entries into notes so nothing is lost
+if(!S.calendarDates) S.calendarDates={};
 if(!S._journalToNotes){
  Object.keys(S.journal||{}).sort().forEach(k=>{
   const txt=(typeof S.journal[k]==="string"?S.journal[k]:"").trim();
@@ -1975,6 +2013,26 @@ function renderCover(){
    <div class="widget-sub">días con meta cumplida esta semana</div></div>
   </div>`;
 
+ // next important date from calendar
+ const calKeys=Object.keys(S.calendarDates||{}).filter(k=>S.calendarDates[k]&&k>=t).sort();
+ const nextDate=calKeys[0];
+ let calInner;
+ if(nextDate){
+  const dd=new Date(nextDate+"T12:00:00");
+  const nice=dd.toLocaleDateString(undefined,{weekday:"short",day:"numeric",month:"short"});
+  const daysAway=Math.round((dd-new Date(t+"T12:00:00"))/86400000);
+  calInner=`<div><div class="widget-big" style="font-size:1.5rem;line-height:1.15">${esc(S.calendarDates[nextDate])}</div>
+   <div class="widget-sub">${nice}${daysAway===0?" · hoy":daysAway===1?" · mañana":` · en ${daysAway} días`}</div></div>`;
+ } else {
+  calInner=`<div class="widget-sub" style="margin-top:auto">Sin fechas marcadas — toca para agregar</div>`;
+ }
+ const card_calendar=`
+  <div class="widget-card" data-goto-tab="week" data-goto-sub="calendar">
+   <div class="widget-top"><span class="widget-label">Próxima fecha</span>
+    <span class="widget-arrow">›</span></div>
+   ${calInner}
+  </div>`;
+
  return `
   <div class="cover">
    <div class="cover-logo">${PRODO_LOGO}</div>
@@ -1987,10 +2045,10 @@ function renderCover(){
 
    <div class="widget-wrap">
     <div class="widget-track" id="widget-track">
-     ${card_points}${card_reminders}${card_gym}${card_week}
+     ${card_points}${card_reminders}${card_gym}${card_calendar}${card_week}
     </div>
     <div class="widget-dots" id="widget-dots">
-     ${[0,1,2,3].map(i=>`<span class="widget-dot${i===0?" active":""}"></span>`).join("")}
+     ${[0,1,2,3,4].map(i=>`<span class="widget-dot${i===0?" active":""}"></span>`).join("")}
     </div>
    </div>
   </div>`;
@@ -3348,11 +3406,13 @@ function renderWeek(){
  <button class="gym-tab-btn${weekView==="stats"?" active":""}" data-weekview="stats">Stats</button>
  <button class="gym-tab-btn${weekView==="tracker"?" active":""}" data-weekview="tracker">Tracker</button>
  <button class="gym-tab-btn${weekView==="notes"?" active":""}" data-weekview="notes">Notes</button>
- <button class="gym-tab-btn${weekView==="focus"?" active":""}" data-weekview="focus">Focus</button>
+ <button class="gym-tab-btn${weekView==="reminders"?" active":""}" data-weekview="reminders">Reminders</button>
+ <button class="gym-tab-btn${weekView==="calendar"?" active":""}" data-weekview="calendar">Calendar</button>
  </div>`;
 
  if(weekView==="notes") return subnav+renderNotes();
- if(weekView==="focus") return subnav+renderFocus();
+ if(weekView==="reminders") return subnav+renderReminders();
+ if(weekView==="calendar") return subnav+renderCalendar();
  if(weekView==="tracker") return subnav+renderTracker();
 
  const days=[];
@@ -3419,8 +3479,122 @@ function renderNotes(){
  `;
 }
 
+// ─── REMINDERS TAB (in Week) ─────────────────────────────────────────────────
+function renderReminders(){
+ const t=today();
+ const rem=(S.reminders||[]).slice().sort((a,b)=>{
+  const da=(a.date||"")+(a.time||""), db=(b.date||"")+(b.time||"");
+  return da.localeCompare(db);
+ });
+ const upcoming=rem.filter(r=>!r.done && (r.date>=t));
+ const past=rem.filter(r=>r.done || r.date<t);
+ const fmtWhen=(r)=>{
+  if(!r.date) return r.time||"";
+  const d=new Date(r.date+"T12:00:00");
+  const day=d.toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric"});
+  return day+(r.time?` · ${r.time}`:"");
+ };
+ const remRow=(r)=>`
+  <div class="t-row">
+   <button class="t-check${r.done?" done":""}" data-rem-check="${r.id}">${r.done?"✓":""}</button>
+   <div style="flex:1">
+    <div class="t-name${r.done?" done":""}">${esc(r.text)}</div>
+    <div class="note-date">${fmtWhen(r)}${r.date===t&&!r.done?" · hoy":""}</div>
+   </div>
+   <button class="del-btn" data-del-rem="${r.id}">×</button>
+  </div>`;
+
+ return`
+  <div class="j-date">Reminders${upcoming.length?` · ${upcoming.length} próximos`:""}</div>
+  <div class="rem-form">
+   <input type="text" id="rem-text" placeholder="Recordatorio (ej. comprar proteína)"/>
+   <div class="rem-form-row">
+    <input type="date" id="rem-date" value="${t}"/>
+    <input type="time" id="rem-time" value="09:00"/>
+    <button class="add-btn" id="rem-add">+</button>
+   </div>
+  </div>
+
+  ${upcoming.length?`<div class="stitle">Próximos</div>${upcoming.map(remRow).join("")}`:`<div class="empty-state" style="margin-top:12px">Sin recordatorios próximos — agrega uno arriba.</div>`}
+  ${past.length?`<div class="stitle" style="margin-top:20px">Pasados / hechos</div>${past.slice(-8).reverse().map(remRow).join("")}`:""}
+
+  <div class="empty-state" style="margin-top:14px;text-align:left;font-style:normal;font-size:.78rem">
+   <b>Nota:</b> los recordatorios de hoy aparecen en tu portada. Prodo te los muestra al abrir la app — recuerda que una web app en iPhone no puede sonar sola si está cerrada.
+  </div>
+ `;
+}
+
+// ─── CALENDAR TAB (in Week) ──────────────────────────────────────────────────
+let calMonth=new Date().getMonth(), calYear=new Date().getFullYear();
+let calSelectedDay=null;
+function renderCalendar(){
+ const t=today();
+ const monthNames=["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+ const firstDay=new Date(calYear,calMonth,1).getDay(); // 0=Sun
+ const daysInMonth=new Date(calYear,calMonth+1,0).getDate();
+ const marks=S.calendarDates||{};
+
+ // build grid cells
+ let cells="";
+ const dayLabels=["D","L","M","M","J","V","S"];
+ cells+=dayLabels.map(d=>`<div class="cal-dow">${d}</div>`).join("");
+ for(let i=0;i<firstDay;i++) cells+=`<div class="cal-cell empty"></div>`;
+ for(let d=1;d<=daysInMonth;d++){
+  const key=calYear+"-"+p2(calMonth+1)+"-"+p2(d);
+  const isToday=key===t;
+  const mark=marks[key];
+  const sel=key===calSelectedDay;
+  cells+=`<button class="cal-cell${isToday?" today":""}${mark?" marked":""}${sel?" sel":""}" data-cal-day="${key}">
+   <span class="cal-num">${d}</span>
+   ${mark?`<span class="cal-dot"></span>`:""}
+  </button>`;
+ }
+
+ // inline add/edit form for the selected day
+ let form="";
+ if(calSelectedDay){
+  const d=new Date(calSelectedDay+"T12:00:00");
+  const nice=d.toLocaleDateString(undefined,{weekday:"long",day:"numeric",month:"long"});
+  form=`<div class="cal-form">
+    <div class="cal-form-date">${nice}</div>
+    <div class="add-row" style="margin-top:8px">
+     <input type="text" id="cal-label" placeholder="Fecha importante (ej. Cumpleaños)" value="${marks[calSelectedDay]?esc(marks[calSelectedDay]):""}"/>
+     <button class="add-btn" id="cal-save">✓</button>
+    </div>
+    ${marks[calSelectedDay]?`<button class="cal-remove" id="cal-remove">Borrar esta fecha</button>`:""}
+   </div>`;
+ }
+
+ // list of marked dates upcoming
+ const marked=Object.keys(marks).sort().filter(k=>marks[k]);
+ const upcoming=marked.filter(k=>k>=t);
+
+ return`
+  <div class="cal-head">
+   <button class="cal-nav" data-cal-nav="-1">‹</button>
+   <div class="cal-title">${monthNames[calMonth]} ${calYear}</div>
+   <button class="cal-nav" data-cal-nav="1">›</button>
+  </div>
+  <div class="cal-grid">${cells}</div>
+  ${form}
+
+  ${upcoming.length?`
+   <div class="stitle">Fechas importantes</div>
+   ${upcoming.map(k=>{
+     const d=new Date(k+"T12:00:00");
+     const label=d.toLocaleDateString(undefined,{weekday:"short",day:"numeric",month:"short"});
+     return`<div class="t-row">
+       <span style="width:8px;height:8px;border-radius:50%;background:var(--ink);flex-shrink:0"></span>
+       <div style="flex:1"><div class="t-name">${esc(marks[k])}</div><div class="note-date">${label}${k===t?" · hoy":""}</div></div>
+       <button class="del-btn" data-cal-del="${k}">×</button>
+     </div>`;
+   }).join("")}
+  `:`<div class="empty-state" style="margin-top:14px">Toca un día para marcar una fecha importante.</div>`}
+ `;
+}
+
 // ─── FOCUS TAB ───────────────────────────────────────────────────────────────
-function renderFocus(){
+function renderFocus_UNUSED(){
  const total=(pomoState.mode==="work"?S.pomo.workMin:S.pomo.breakMin)*60;
  const angle=Math.min(360,(1-pomoState.secs/total)*360);
  const pts=[];
@@ -3462,6 +3636,7 @@ function attachHandlers(){
    const dest=el.dataset.gotoTab;
    const sub=el.dataset.gotoSub;
    if(sub==="reminders"){ weekView="reminders"; }
+   if(sub==="calendar"){ weekView="calendar"; }
    tab=dest; stopPomo(); render(); window.scrollTo(0,0);
   });
   // swipe dots follow the carousel
@@ -3556,15 +3731,61 @@ function attachHandlers(){
  save(); renderContent();
  });
  }
- if(weekView==="focus"){
- document.getElementById("pomo-toggle").onclick=togglePomo;
- document.getElementById("pomo-reset").onclick=resetPomo;
- document.querySelectorAll("[data-pmode]").forEach(el=>el.onclick=()=>{
- stopPomo();
- pomoState.mode=el.dataset.pmode;
- pomoState.secs=(pomoState.mode==="work"?S.pomo.workMin:S.pomo.breakMin)*60;
- renderContent();
+ if(weekView==="reminders"){
+ const addRem=()=>{
+  const text=(document.getElementById("rem-text").value||"").trim();
+  if(!text){alert("Escribe el recordatorio");return;}
+  const date=document.getElementById("rem-date").value||today();
+  const time=document.getElementById("rem-time").value||"";
+  if(!S.reminders) S.reminders=[];
+  S.reminders.push({id:"rm"+Date.now(),text,date,time,done:false});
+  save(); renderContent();
+ };
+ const rb=document.getElementById("rem-add");
+ if(rb) rb.onclick=addRem;
+ const rt=document.getElementById("rem-text");
+ if(rt) rt.onkeydown=e=>{if(e.key==="Enter")addRem();};
+ document.querySelectorAll("[data-rem-check]").forEach(el=>el.onclick=()=>{
+  const r=(S.reminders||[]).find(x=>x.id===el.dataset.remCheck);
+  if(r){r.done=!r.done;save();renderContent();}
  });
+ document.querySelectorAll("[data-del-rem]").forEach(el=>el.onclick=()=>{
+  S.reminders=(S.reminders||[]).filter(x=>x.id!==el.dataset.delRem);
+  save(); renderContent();
+ });
+ }
+ if(weekView==="calendar"){
+  document.querySelectorAll("[data-cal-nav]").forEach(el=>el.onclick=()=>{
+   calMonth+=parseInt(el.dataset.calNav,10);
+   if(calMonth<0){calMonth=11;calYear--;}
+   if(calMonth>11){calMonth=0;calYear++;}
+   calSelectedDay=null;
+   renderContent();
+  });
+  document.querySelectorAll("[data-cal-day]").forEach(el=>el.onclick=()=>{
+   const key=el.dataset.calDay;
+   calSelectedDay=(calSelectedDay===key)?null:key; // toggle the form
+   renderContent();
+  });
+  const saveBtn=document.getElementById("cal-save");
+  if(saveBtn) saveBtn.onclick=()=>{
+   const v=(document.getElementById("cal-label").value||"").trim();
+   if(!S.calendarDates) S.calendarDates={};
+   if(v) S.calendarDates[calSelectedDay]=v;
+   else delete S.calendarDates[calSelectedDay];
+   calSelectedDay=null;
+   save(); renderContent();
+  };
+  const rmBtn=document.getElementById("cal-remove");
+  if(rmBtn) rmBtn.onclick=()=>{
+   delete S.calendarDates[calSelectedDay];
+   calSelectedDay=null;
+   save(); renderContent();
+  };
+  document.querySelectorAll("[data-cal-del]").forEach(el=>el.onclick=()=>{
+   delete S.calendarDates[el.dataset.calDel];
+   save(); renderContent();
+  });
  }
  }
 }
